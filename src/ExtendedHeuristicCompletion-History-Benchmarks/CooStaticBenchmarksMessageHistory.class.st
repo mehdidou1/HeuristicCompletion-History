@@ -57,7 +57,7 @@ CooStaticBenchmarksMessageHistory >> run [
 			method parseTree ifNotNil: [ :parseTree |
 					parseTree nodesDo: [ :node |
 							(node isMessage and: [ cachedSelectors includes: node selector ]) ifTrue: [
-									Transcript show: 'Benched messages:'; show: node selector; space.
+									Transcript cr; show: 'Benched messages:'; show: node selector; space.
 									matchedCallsites := matchedCallsites + 1.
 									pos := node selectorInterval ifNil: [ node start ] ifNotNil: [ :interval | interval first ].
 									self benchCallsite: node atPosition: pos ] ] ] ].

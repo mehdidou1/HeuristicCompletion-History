@@ -149,8 +149,8 @@ HistoryScrapper >> commitCount: aNumber [
 ]
 
 { #category : 'actions' }
-HistoryScrapper >> fetchAncestorCommit: anInteger [
-
+HistoryScrapper >> commitsFromHead: anInteger [
+	"return last, last -1, last -2 .. commits up to last-anInteger"
 	| commits |
 	commits := repository head withCommitWalkDo: [ :walk |
 			  | com |
@@ -159,7 +159,21 @@ HistoryScrapper >> fetchAncestorCommit: anInteger [
 				         maxNumber: 1000;
 				         commits.
 			  com ].
-	^ commits at: anInteger.
+	^ commits copyFrom: 1 to: anInteger
+]
+
+{ #category : 'actions' }
+HistoryScrapper >> fetchAncestorCommit: anInteger [
+	"return last, last -1, last -2 .. commits up to last-anInteger"
+	| commits |
+	commits := repository head withCommitWalkDo: [ :walk |
+			  | com |
+			  com := walk
+				         fromHead;
+				         maxNumber: 1000;
+				         commits.
+			  com ].
+	^ commits copyFrom: 1 to: anInteger
 ]
 
 { #category : 'actions' }

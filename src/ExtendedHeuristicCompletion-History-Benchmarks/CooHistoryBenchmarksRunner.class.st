@@ -25,20 +25,21 @@ CooHistoryBenchmarksRunner class >> newRunWithSession: aSession [
 	"CooHistoryBenchmarksRunner 
 		newRunWithSession: CooSession current )"
 
-	| populator messageBenchmark variableBenchmark |
+	| populator messageBenchmark variableBenchmark commits |
 	"fill up the history"
 	populator := HistoryCachePopulator repo: 'git@github.com:Ducasse/Comix2.git'.
-	populator populateForBenchmarkCommit: 10.
-
+	commits := populator commitsForHead: 10.
 
 	messageBenchmark := CooStaticBenchmarksMessageHistory new
-		                    session: aSession;
-		                    yourself.
+		                    session: aSession; yourself.
 	variableBenchmark := CooStaticBenchmarksVariableHistory new
-		                     session: aSession;
-		                     yourself.
-	messageBenchmark run.
-	variableBenchmark run.
+		                     session: aSession; yourself.
+	
+	commits reverseDo: [ :commit |
+		populator loadFromOldToNewCommit: commit.
+		messageBenchmark run.
+		variableBenchmark run.
+	].
 
 	^ {
 		  messageBenchmark.
@@ -102,7 +103,7 @@ CooHistoryBenchmarksRunner class >> runWithSession: aSession scope: aScope [
 	| populator messageBenchmark variableBenchmark scopeName |
 	"fill up the history"
 	populator := HistoryCachePopulator repo: 'git@github.com:Ducasse/Comix2.git'.
-	populator populateForBenchmarkCommit: 10.
+	populator populateForBenchmarkCommits: 10.
 
 
 	messageBenchmark := CooStaticBenchmarksMessageHistory new

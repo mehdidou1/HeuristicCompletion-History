@@ -67,6 +67,13 @@ HistoryCachePopulator class >> toplo [
 	(self populateFromRepo:  'git@github.com:pharo-graphics/Toplo.git' commits: 500) inspect 
 ]
 
+{ #category : 'forBenchmarks' }
+HistoryCachePopulator >> commitsForHead: aNumber [
+
+	^ self scrapper commitsFromHead: aNumber
+	
+]
+
 { #category : 'utils' }
 HistoryCachePopulator >> computeDeltaMessageBetween: aNewMethodAst andOld: anOldMethodAst [ 
 	"This is a copy of the logic defined in the CooTemporalCache or subclasses.
@@ -127,6 +134,18 @@ HistoryCachePopulator >> initialize [
 	
 ]
 
+{ #category : 'forBenchmarks' }
+HistoryCachePopulator >> loadFromOldToNewCommit: commit [
+ 			| infos |
+			Transcript cr; show: 'Loading and importing '; show: commit printString.
+			
+			commit checkoutAllPackages.			
+			infos := self extractMethodsFromCommit: commit.
+			infos do: [ :info | session addMethodItem: info ].
+			infos := self extractClassesFromCommit: commit.
+			infos do: [ :info | session addClassItem: info ]
+]
+
 { #category : 'main API' }
 HistoryCachePopulator >> populateCaches [
 	"Main method to populate both temporal and frequency caches from Git history."
@@ -151,15 +170,20 @@ HistoryCachePopulator >> populateCaches [
 ]
 
 { #category : 'forBenchmarks' }
-HistoryCachePopulator >> populateForBenchmarkCommit: aNumber [
+HistoryCachePopulator >> populateForBenchmarkCommits: aNumber [
 
-	| commit infos |
-	commit := self scrapper fetchAncestorCommit: aNumber.
-	commit checkoutAllPackages.
-	infos := self extractMethodsFromCommit: commit.
-	infos do: [ :info | session addMethodItem: info ].
-	infos := self extractClassesFromCommit: commit.
-	infos do: [ :info | session addClassItem: info ]
+	| commits infos |
+	commits := self commitsFromHead: aNumber.
+	commits reverseDo: [ :commit |
+			Transcript
+				cr;
+				show: 'Loading commits: ' , commit printString;
+				cr.
+			commit checkoutAllPackages.
+			infos := self extractMethodsFromCommit: commit.
+			infos do: [ :info | session addMethodItem: info ].
+			infos := self extractClassesFromCommit: commit.
+			infos do: [ :info | session addClassItem: info ] ]
 ]
 
 { #category : 'compute population' }
