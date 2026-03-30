@@ -30,10 +30,9 @@ HistoryCachePopulator class >> mockRepo [
 { #category : 'examples' }
 HistoryCachePopulator class >> populateFromRepo: aURLString [
 
-	^ self new
-		scrapper: (HistoryScrapper repo: aURLString);
-		populateCaches;
-		yourself
+	^ (self repo: aURLString)
+		  populateCaches;
+		  yourself
 ]
 
 { #category : 'examples' }
@@ -43,6 +42,14 @@ HistoryCachePopulator class >> populateFromRepo: aURLString commits: aNumber [
 		scrapper: (HistoryScrapper repo: aURLString commits: aNumber);
 		populateCaches;
 		yourself
+]
+
+{ #category : 'examples' }
+HistoryCachePopulator class >> repo: aURLString [
+
+	^ self new
+		  scrapper: (HistoryScrapper repo: aURLString);
+		  yourself
 ]
 
 { #category : 'examples' }
@@ -123,22 +130,37 @@ HistoryCachePopulator >> initialize [
 { #category : 'main API' }
 HistoryCachePopulator >> populateCaches [
 	"Main method to populate both temporal and frequency caches from Git history."
-
+	
 	| commits totalMethods |
-	commits := self scrapper fetchLatestCommits. "we order older first!"
+	commits := self scrapper fetchLatestCommits.
+	
+	"we order older first!"
 	commits := commits reversed.
 	totalMethods := 0.
-
-	Transcript
-		show: 'Populating caches from ' , commits size asString , ' commits...';
-		cr.
-		
+	
+	Transcript show: 'Populating caches from ', commits size asString, ' commits...'; cr.
+	
 	commits withIndexDo: [ :commit :index |
-			| infos |
+		
+		| methodInfos |
+		methodInfos := self extractMethodsFromCommit: commit.
+		methodInfos do: [ :info |
+			session addMethodItem: info ].
+		totalMethods := totalMethods + methodInfos size.
+		]
+]
+
+{ #category : 'forBenchmarks' }
+HistoryCachePopulator >> populateForBenchmarkCommit: aNumber [
+
+	| commit infos |
+	commit := self scrapper fetchAncestorCommit: aNumber.
+	
+
 			infos := self extractMethodsFromCommit: commit.
 			infos do: [ :info | session addMethodItem: info ].
 			infos := self extractClassesFromCommit: commit.
-			infos do: [ :info | session addClassItem: info ] ]
+			infos do: [ :info | session addClassItem: info ]
 ]
 
 { #category : 'compute population' }

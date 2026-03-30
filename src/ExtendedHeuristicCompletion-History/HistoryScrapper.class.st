@@ -96,18 +96,6 @@ HistoryScrapper class >> repo: aURLString [
 ]
 
 { #category : 'instance creation' }
-HistoryScrapper class >> repo: aURLString ancestorNumber: aNumber [
-	"Fetch and show the nth ancesrtor of HEAD for the given repository URL.
-	Usage: 'git@github.com:Ducasse/Comix2.git'"
-
-	^ self new
-		  repositoryURLString: aURLString;
-		  commitCount: aNumber;
-		  initializeRepository;
-		  yourself
-]
-
-{ #category : 'instance creation' }
 HistoryScrapper class >> repo: aURLString commits: aNumber [
 	"Fetch and show a specific number of commits for the given repository URL.
 	Usage: 
@@ -160,7 +148,7 @@ HistoryScrapper >> commitCount: aNumber [
 	commitCount := aNumber
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 HistoryScrapper >> fetchAncestorCommit: anInteger [
 
 	| commits |
