@@ -85,19 +85,30 @@ Class {
 }
 
 { #category : 'instance creation' }
-HistoryScrapper class >> fetchRepo: aURLString [
+HistoryScrapper class >> repo: aURLString [
 	"Fetch and show commits for the given repository URL.
 	Usage: HistoryScrapper fetchRepo: 'https://github.com/pharo-spec/Spec'"
 	
 	^ self new
 		repositoryURLString: aURLString;
 		initializeRepository;
-		fetchLatestCommits;
 		yourself
 ]
 
 { #category : 'instance creation' }
-HistoryScrapper class >> fetchRepo: aURLString commits: aNumber [
+HistoryScrapper class >> repo: aURLString ancestorNumber: aNumber [
+	"Fetch and show the nth ancesrtor of HEAD for the given repository URL.
+	Usage: 'git@github.com:Ducasse/Comix2.git'"
+
+	^ self new
+		  repositoryURLString: aURLString;
+		  commitCount: aNumber;
+		  initializeRepository;
+		  yourself
+]
+
+{ #category : 'instance creation' }
+HistoryScrapper class >> repo: aURLString commits: aNumber [
 	"Fetch and show a specific number of commits for the given repository URL.
 	Usage: 
 	
@@ -107,7 +118,6 @@ HistoryScrapper class >> fetchRepo: aURLString commits: aNumber [
 		repositoryURLString: aURLString;
 		commitCount: aNumber;
 		initializeRepository;
-		fetchLatestCommits;
 		yourself
 ]
 
@@ -150,11 +160,24 @@ HistoryScrapper >> commitCount: aNumber [
 	commitCount := aNumber
 ]
 
+{ #category : 'as yet unclassified' }
+HistoryScrapper >> fetchAncestorCommit: anInteger [
+
+	| commits |
+	commits := repository head withCommitWalkDo: [ :walk |
+			  | com |
+			  com := walk
+				         fromHead;
+				         maxNumber: 1000;
+				         commits.
+			  com ].
+	^ commits at: anInteger.
+]
+
 { #category : 'actions' }
 HistoryScrapper >> fetchLatestCommits [
 	"Fetch remote changes and answer the requested number of commits."
 	
-
 	^ repository head withCommitWalkDo: [ :walk |
 			  | com |
 			  com := walk

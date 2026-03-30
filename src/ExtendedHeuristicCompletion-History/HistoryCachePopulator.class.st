@@ -31,7 +31,7 @@ HistoryCachePopulator class >> mockRepo [
 HistoryCachePopulator class >> populateFromRepo: aURLString [
 
 	^ self new
-		scrapper: (HistoryScrapper fetchRepo: aURLString);
+		scrapper: (HistoryScrapper repo: aURLString);
 		populateCaches;
 		yourself
 ]
@@ -40,7 +40,7 @@ HistoryCachePopulator class >> populateFromRepo: aURLString [
 HistoryCachePopulator class >> populateFromRepo: aURLString commits: aNumber [
 
 	^ self new
-		scrapper: (HistoryScrapper fetchRepo: aURLString commits: aNumber);
+		scrapper: (HistoryScrapper repo: aURLString commits: aNumber);
 		populateCaches;
 		yourself
 ]
