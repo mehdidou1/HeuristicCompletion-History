@@ -432,8 +432,14 @@ CooSession >> structuralTemporal [
 	
 ]
 
+{ #category : 'accessing' }
+CooSession >> userSelectionHandler [
+
+	^ userSelectionHandler
+]
+
 { #category : 'accessing - handlers' }
-CooSession >> useSelectionHandler: aUserSelectionHandler [
+CooSession >> userSelectionHandler: aUserSelectionHandler [
 
 	userSelectionHandler := aUserSelectionHandler
 ]
