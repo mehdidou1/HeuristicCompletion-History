@@ -43,10 +43,10 @@ CooTemporalHandler >> classEntries [
 	
 	"
 
-	^ classDescriptions collect: [ :each | 
-		(NECSessionGlobalEntry contents: each nameOfClass node: nil)
-			sessionItem: each ;
-			fetcher: 'Session Temporal' ]
+	^ classDescriptions collect: [ :each |
+			  (NECSessionGlobalEntry contents: each nameOfClass node: nil)
+				  sessionItem: each;
+				  fetcherName: 'Session Temporal' class name ]
 ]
 
 { #category : 'api' }
@@ -122,7 +122,7 @@ CooTemporalHandler >> selectorEntries [
 	^ (methodDescriptions reject: [ :each | each event = #removed ]) collect: [ :each |
 			  (NECSessionSelectorEntry contents: each selector node: nil)
 				  sessionItem: each;
-				  fetcher: 'Session Temporal' ]
+				  fetcherName: 'Session Temporal' class name ]
 ]
 
 { #category : 'accessing' }

@@ -16,10 +16,10 @@ CooLRUHandler >> classEntries [
 
 	| col |
 	col := OrderedCollection new.
-	classLRU keysAndValuesDo: [ :k :v | 
-		col add: ((NECSessionGlobalEntry contents: v nameOfClass node: nil)
+	classLRU keysAndValuesDo: [ :k :v |
+			col add: ((NECSessionGlobalEntry contents: v nameOfClass node: nil)
 					 sessionItem: v;
-					 fetcher: 'Session LRU';
+					 fetcherName: 'Session LRU' class name;
 					 yourself) ].
 	^ col
 ]
@@ -47,16 +47,13 @@ CooLRUHandler >> initialize [
 { #category : 'matching' }
 CooLRUHandler >> selectorEntries [
 	"Clearly we should manage what happen when we remove a class"
-	
-	
+
 	| col |
-	col := OrderedCollection new. 
-	selectorLRU keysAndValuesDo: [ :k :v | 
-		col add: 
-			((NECSessionSelectorEntry contents: v selector node: nil)
-				  sessionItem: v;
-				  fetcher: 'Session LRU';
-					yourself )
-			].
-	^ col 
+	col := OrderedCollection new.
+	selectorLRU keysAndValuesDo: [ :k :v |
+			col add: ((NECSessionSelectorEntry contents: v selector node: nil)
+					 sessionItem: v;
+					 fetcherName: 'Session LRU' class name;
+					 yourself) ].
+	^ col
 ]
