@@ -80,9 +80,37 @@ CooHistoryBenchmarksRunner class >> run [
 CooHistoryBenchmarksRunner class >> runComix [
 	<script>
 	
-	[ CooSession resetProgramEntities.
+	CooSession resetProgramEntities.
 	CooSession current noUserSelectionHandling.
-	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:Ducasse/Comix2.git' numberOfAnalyzedCommits: 10) inspect ] fork
+	Transcript show: CooSession current reportString.
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:Ducasse/Comix2.git' numberOfAnalyzedCommits: 10) inspect.
+	Transcript show: CooSession current reportString
+	
+]
+
+{ #category : 'running' }
+CooHistoryBenchmarksRunner class >> runMicrodown [
+	<script>
+	
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	Transcript show: CooSession current reportString.
+	
+	Smalltalk globals
+	at: #BaselineOfMicrodown 
+	ifPresent: [ :c | c removeFromSystem ].
+
+	Metacello new
+		baseline: 'Microdown';
+		repository: 'github://pillar-markup/Microdown:v2.9.3/src';
+		onConflict: [ :ex | ex useIncoming ];
+		onUpgrade: [ :ex | ex useIncoming ];
+		load: #('All').
+	
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
+	
+	Transcript show: CooSession current reportString
+	
 ]
 
 { #category : 'running' }
@@ -92,9 +120,9 @@ CooHistoryBenchmarksRunner class >> runRoassal [
 	CooSession resetProgramEntities.
 	CooSession current noUserSelectionHandling.
 	Metacello new
-    baseline: 'Roassal';
-    repository: 'github://pharo-graphics/Roassal';
-    load.
+			baseline: 'Roassal';
+			repository: 'github://pharo-graphics/Roassal:Pharo' , SystemVersion current major asString;
+			load: 'Full'.
 	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pharo-graphics/Roassal.git' numberOfAnalyzedCommits: 1) inspect
 ]
 
@@ -104,6 +132,8 @@ CooHistoryBenchmarksRunner class >> runSpc [
 	
 	CooSession resetProgramEntities.
 	CooSession current noUserSelectionHandling.
+	Transcript show: CooSession current reportString.
+	self newRunWithSession: CooSession current repositoryString:  'git@github.com:pharo-spec/spec.git' numberOfAnalyzedCommits: 10.
+	Transcript show: CooSession current reportString
 	
-	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pharo-spec/spec.git' numberOfAnalyzedCommits: 10) inspect
 ]
