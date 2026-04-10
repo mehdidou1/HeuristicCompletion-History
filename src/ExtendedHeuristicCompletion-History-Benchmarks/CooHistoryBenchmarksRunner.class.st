@@ -144,9 +144,7 @@ CooHistoryBenchmarksRunner class >> runComix [
 CooHistoryBenchmarksRunner class >> runMicrodown [
 	<script>
 	
-	CooSession resetProgramEntities.
-	CooSession current noUserSelectionHandling.
-	Transcript show: CooSession current reportString.
+	
 	
 	Smalltalk globals
 	at: #BaselineOfMicrodown 
@@ -159,7 +157,12 @@ CooHistoryBenchmarksRunner class >> runMicrodown [
 		onUpgrade: [ :ex | ex useIncoming ];
 		load: #('All').
 	
-	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	Transcript show: CooSession current reportString.
+	
+	
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 15).
 	
 	Transcript show: CooSession current reportString
 	
