@@ -9,14 +9,14 @@ Class {
 	#tag : 'Handlers'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooMostRecentFrequencyHandlerTest >> fakeEntryWithContents: aString [
 	"Create a minimal mock entry object that responds to #contents."
 
 	^ NECSessionSelectorEntry contents: aString node: nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooMostRecentFrequencyHandlerTest >> fakeInteractionItemWithToken: aToken selectedIndex: anIndex choices: aCollection [
 
 	| item |
@@ -27,14 +27,14 @@ CooMostRecentFrequencyHandlerTest >> fakeInteractionItemWithToken: aToken select
 	^ item
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooMostRecentFrequencyHandlerTest >> setUp [
 
 	super setUp.
 	handler := CooMostRecentFrequencyHandler new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooMostRecentFrequencyHandlerTest >> testDecayReducesOldEntriesFrequency [
 
 	| entryA entryB itemA itemB |
@@ -72,7 +72,7 @@ CooMostRecentFrequencyHandlerTest >> testLowercasedAndUppercasedReturnSameAsGene
 	self assert: handler sortedUserLowercasedEntries size equals: handler sortedUserEntries size
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooMostRecentFrequencyHandlerTest >> testRecentSelectionOvertakesOldFrequent [
 	"If A is selected once, then B is selected 3 times in a row, B should dominate
 	 because A gets decayed 3 times: 1 * 0.5 * 0.5 * 0.5 = 0.125"
@@ -89,7 +89,7 @@ CooMostRecentFrequencyHandlerTest >> testRecentSelectionOvertakesOldFrequent [
 	self assert: handler sortedRecentChoices first contents equals: 'beta'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooMostRecentFrequencyHandlerTest >> testRepeatedSelectionOvercomesDecay [
 	"Selecting A many times should keep it above B even after B is selected once"
 
@@ -134,7 +134,7 @@ CooMostRecentFrequencyHandlerTest >> testSingleSelectionIsReturned [
 	self assert: handler sortedRecentChoices first contents equals: 'collect:'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooMostRecentFrequencyHandlerTest >> testSortedUserEntriesReturnsAllWhenLessThan5 [
 
 	| entries |
@@ -148,7 +148,7 @@ CooMostRecentFrequencyHandlerTest >> testSortedUserEntriesReturnsAllWhenLessThan
 	self assert: handler sortedUserEntries size equals: 3
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooMostRecentFrequencyHandlerTest >> testSortedUserEntriesReturnsAtMost5 [
 	"sortedUserEntries should cap at 5 items even if more exist"
 

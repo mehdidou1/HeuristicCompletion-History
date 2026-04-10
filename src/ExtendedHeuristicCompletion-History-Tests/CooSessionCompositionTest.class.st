@@ -6,19 +6,19 @@ Class {
 	#tag : 'Session'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooSessionCompositionTest >> fakeEntryWithContents: aString [
 
 	^ NECSessionSelectorEntry contents: aString node: nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooSessionCompositionTest >> fakeGlobalEntryWithContents: aString [
 
 	^ NECSessionGlobalEntry contents: aString node: nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooSessionCompositionTest >> fakeInteractionItemWithToken: aToken selectedIndex: anIndex choices: aCollection [
 
 	| item |
@@ -29,14 +29,14 @@ CooSessionCompositionTest >> fakeInteractionItemWithToken: aToken selectedIndex:
 	^ item
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooSessionCompositionTest >> setUp [
 
 	super setUp.
 	session := CooSession new programEntityHandler: CooFrequencyHandler new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testClassEntriesComposesUserSelectionsAndStructuralItems [
 	"classEntries = userSelectionHandler sortedUserUppercasedEntries , programEntityHandler classEntries."
 
@@ -54,7 +54,7 @@ CooSessionCompositionTest >> testClassEntriesComposesUserSelectionsAndStructural
 	self assert: ((session classEntries collect: [ :e | e contents ]) includes: 'StructuralClass')
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testDualHandlerSeparatesUpperAndLowerInSession [ 
 	"With CooDualMostRecentFrequencyHandler, lowercase completions go to selectorEntries
 	 and uppercase completions go to classEntries."
@@ -77,7 +77,7 @@ CooSessionCompositionTest >> testDualHandlerSeparatesUpperAndLowerInSession [
 	self assert: ((session classEntries collect: [ :e | e contents ]) includes: 'OrderedCollection')
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testNullSelectionHandlerContributesNothing [
 	"When using CooNullUserSelectionHandler, only structural entries should appear."
 
@@ -88,7 +88,7 @@ CooSessionCompositionTest >> testNullSelectionHandlerContributesNothing [
 	self assert: session selectorEntries first contents equals: #onlyStructural
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testResetProgramEntitiesDoesNotAffectCompletionItems [
 	"resetProgramEntities clears structural data but should not affect user selection tracking."
 
@@ -110,7 +110,7 @@ CooSessionCompositionTest >> testResetProgramEntitiesDoesNotAffectCompletionItem
 	self assert: session programEntityHandler selectorEntries isEmpty
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testSelectorEntriesComposesUserSelectionsAndStructuralItems [
 	"selectorEntries = userSelectionHandler sortedUserLowercasedEntries , programEntityHandler selectorEntries.
 	 So both sources should contribute."
@@ -131,7 +131,7 @@ CooSessionCompositionTest >> testSelectorEntriesComposesUserSelectionsAndStructu
 	self assert: ((session selectorEntries collect: [ :e | e contents ]) includes: #structuralMethod)
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testSessionPrintOnIncludesHandlerInfo [ 
 	"printOn: should include the handler class name and counts."
 
@@ -145,7 +145,7 @@ CooSessionCompositionTest >> testSessionPrintOnIncludesHandlerInfo [
 	self assert: (printString includesSubstring: 'cls')
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooSessionCompositionTest >> testSwitchingUserSelectionHandlerMidSession [
 	"Switching from Null to MostRecentFrequency should immediately start tracking."
 
