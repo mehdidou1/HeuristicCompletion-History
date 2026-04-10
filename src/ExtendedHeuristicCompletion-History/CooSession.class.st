@@ -367,6 +367,18 @@ CooSession >> removeMethodFromVocabulary: anAnn [
 			 yourself) 
 ]
 
+{ #category : 'printing' }
+CooSession >> reportString [ 
+
+	^ String streamContents: [ :aStream |  
+		super printOn: aStream.
+		aStream space ; nextPutAll: (programEntityHandler class name allButFirst: 3).
+		aStream space ; nextPutAll: 'mths '; print: methodDescriptions size.
+		aStream space ; nextPutAll: 'cls '; print: classDescriptions size.
+		aStream space ; nextPutAll: (userSelectionHandler class name allButFirst: 3).
+		aStream space ; nextPutAll: 'interaction'; print: completionItems size ]
+]
+
 { #category : 'initialization' }
 CooSession >> resetInteractionItems [
 	

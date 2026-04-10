@@ -48,24 +48,18 @@ CooStaticBenchmarksVariableHistory >> run [
 	scannedMethods := 0.
 	matchedCallsites := 0.
 
+		Transcript cr; show: '# Running Message Beanchmark'.
 	self session existingMethods do: [ :method |
 			scannedMethods := scannedMethods + 1.
 			method parseTree ifNotNil: [ :parseTree |
 					parseTree nodesDo: [ :node |
 							(node isVariable and: [ node name first isUppercase and: [ cachedClassNames includes: node name ] ]) ifTrue: [
-								Transcript cr; show: 'Benched class: '; show: node name; cr.
+								Transcript cr; show: '## Benched class: '; show: node name; cr.
 								
 									matchedCallsites := matchedCallsites + 1.
 									self benchCallsite: node atPosition: node start ] ] ] ].
 
-	matchedCallsites = 0 ifTrue: [
-			Transcript
-				show: 'Variable history benchmark found no matching callsites. Cached class names: ';
-				show: cachedClassNames size asString;
-				show: ' - scanned methods: ';
-				show: scannedMethods asString;
-				show: '. Try a broader scope or run on modified methods.';
-				cr ]
+	
 ]
 
 { #category : 'benchmarks' }

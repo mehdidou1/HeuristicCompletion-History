@@ -139,7 +139,7 @@ HistoryCachePopulator >> loadFromOldToNewCommit: commit [
  			| infos |
 			Transcript cr; show: 'Loading and importing '; show: commit printString.
 			
-			commit checkoutAllPackages.			
+			commit checkoutWithStrategy: IceCheckoutAlreadyLoadedPackages new.			
 			infos := self extractMethodsFromCommit: commit.
 			infos do: [ :info | session addMethodItem: info ].
 			infos := self extractClassesFromCommit: commit.

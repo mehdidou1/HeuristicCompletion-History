@@ -47,77 +47,23 @@ CooHistoryBenchmarksRunner class >> newRunWithSession: aSession [
 ]
 
 { #category : 'running' }
-CooHistoryBenchmarksRunner class >> run [
+CooHistoryBenchmarksRunner class >> newRunWithSession: aSession repositoryString: aString numberOfAnalyzedCommits: anInteger [
 
-	^ self runWithSession: CooSession current
-]
-
-{ #category : 'running' }
-CooHistoryBenchmarksRunner class >> runBenchmarks [
-
-	^ self runBenchmarksWithSession: CooSession current
-]
-
-{ #category : 'running' }
-CooHistoryBenchmarksRunner class >> runBenchmarksWithSession: aSession [
-
-	| scope |
-	scope := PackageOrganizer default packages.
-	^ self runWithSession: aSession scope: scope
-
-]
-
-{ #category : 'as yet unclassified' }
-CooHistoryBenchmarksRunner class >> runOnModifiedMethods [
-	"Run benchmarks only on methods that were modified in the populated commits.
-	Example: CooHistoryBenchmarksRunner runOnModifiedMethods"
-
-	^ self runOnModifiedMethodsWithSession: CooSession current
-]
-
-{ #category : 'as yet unclassified' }
-CooHistoryBenchmarksRunner class >> runOnModifiedMethodsWithSession: aSession [
-	"Run benchmarks only on methods that were modified in the populated commits.
-	Example: CooHistoryBenchmarksRunner runOnModifiedMethodsWithSession: CooSession current"
-
-	| scope |
-	scope := CoBenchmarkModifiedMethods fromSession: aSession.
-	^ self runWithSession: aSession scope: scope
-]
-
-{ #category : 'running' }
-CooHistoryBenchmarksRunner class >> runWithSession: aSession [
-
-	^ self runBenchmarksWithSession: aSession
-]
-
-{ #category : 'running' }
-CooHistoryBenchmarksRunner class >> runWithSession: aSession scope: aScope [
-	"Run benchmarks with a specific session and scope.
-	Example: CooHistoryBenchmarksRunner runWithSession: CooSession current scope: (RPackage named: 'Kernel')"
-
-	"CooHistoryBenchmarksRunner 
-		runWithSession: CooSession current 
-		scope: (PackageOrganizer default packageNamed: 'Comix')"
-
-	| populator messageBenchmark variableBenchmark scopeName |
+	| populator messageBenchmark variableBenchmark commits |
 	"fill up the history"
-	populator := HistoryCachePopulator repo: 'git@github.com:Ducasse/Comix2.git'.
-	populator populateForBenchmarkCommits: 10.
-
+	populator := HistoryCachePopulator repo: aString .
+	commits := populator commitsForHead: anInteger.
 
 	messageBenchmark := CooStaticBenchmarksMessageHistory new
-		                    session: aSession;
-		                    scope: aScope;
-		                    yourself.
+		                    session: aSession; yourself.
 	variableBenchmark := CooStaticBenchmarksVariableHistory new
-		                     session: aSession;
-		                     scope: aScope;
-		                     yourself.
-
-	scopeName := self scopeNameFor: aScope.
-	messageBenchmark run.
-	variableBenchmark run.
+		                     session: aSession; yourself.
+	
+	commits reverseDo: [ :commit |
+		populator loadFromOldToNewCommit: commit.
+		messageBenchmark run.
+		variableBenchmark run.
+	].
 
 	^ {
 		  messageBenchmark.
@@ -125,13 +71,39 @@ CooHistoryBenchmarksRunner class >> runWithSession: aSession scope: aScope [
 ]
 
 { #category : 'running' }
-CooHistoryBenchmarksRunner class >> scopeNameFor: aScope [
+CooHistoryBenchmarksRunner class >> run [
+	
+	^ self newRunWithSession: CooSession current
+]
 
-	(aScope isCollection)
-		ifTrue: [ ^ aScope size asString, ' items' ].
-	(aScope class canUnderstand: #name)
-		ifTrue: [ ^ aScope name ].
-	(aScope respondsTo: #size)
-		ifTrue: [ ^ aScope size asString, ' scoped elements' ].
-	^ aScope class name
+{ #category : 'running' }
+CooHistoryBenchmarksRunner class >> runComix [
+	<script>
+	
+	[ CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:Ducasse/Comix2.git' numberOfAnalyzedCommits: 10) inspect ] fork
+]
+
+{ #category : 'running' }
+CooHistoryBenchmarksRunner class >> runRoassal [
+	<script>
+	
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	Metacello new
+    baseline: 'Roassal';
+    repository: 'github://pharo-graphics/Roassal';
+    load.
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pharo-graphics/Roassal.git' numberOfAnalyzedCommits: 1) inspect
+]
+
+{ #category : 'running' }
+CooHistoryBenchmarksRunner class >> runSpc [
+	<script>
+	
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pharo-spec/spec.git' numberOfAnalyzedCommits: 10) inspect
 ]
