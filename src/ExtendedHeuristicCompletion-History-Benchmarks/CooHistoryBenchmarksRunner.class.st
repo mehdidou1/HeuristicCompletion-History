@@ -18,6 +18,56 @@ Class {
 }
 
 { #category : 'running' }
+CooHistoryBenchmarksRunner class >> dryRunLoadingWithSession: aSession repositoryString: aString numberOfAnalyzedCommits: anInteger [
+
+	| populator commits |
+	"fill up the history"
+	populator := HistoryCachePopulator repo: aString .
+	commits := populator commitsForHead: anInteger.
+
+"
+	messageBenchmark := CooStaticBenchmarksMessageHistory new
+		                    session: aSession; yourself.
+	variableBenchmark := CooStaticBenchmarksVariableHistory new
+		                     session: aSession; yourself.
+"
+	
+	commits reverseDo: [ :commit |
+		populator loadFromOldToNewCommit: commit.
+"	
+		messageBenchmark run.
+		variableBenchmark run.
+"
+	].
+
+]
+
+{ #category : 'running' }
+CooHistoryBenchmarksRunner class >> dryRunMicrodown [
+	<script>
+	
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	Transcript show: CooSession current reportString.
+	
+	Smalltalk globals
+	at: #BaselineOfMicrodown 
+	ifPresent: [ :c | c removeFromSystem ].
+
+	Metacello new
+		baseline: 'Microdown';
+		repository: 'github://pillar-markup/Microdown:v2.9.3/src';
+		onConflict: [ :ex | ex useIncoming ];
+		onUpgrade: [ :ex | ex useIncoming ];
+		load: #('All').
+	
+	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
+	
+	Transcript show: CooSession current reportString
+	
+]
+
+{ #category : 'running' }
 CooHistoryBenchmarksRunner class >> newRunWithSession: aSession [ 
 	"Run benchmarks with a specific session and scope.
 	Example: CooHistoryBenchmarksRunner runWithSession: CooSession current scope: (RPackage named: 'Kernel')"
