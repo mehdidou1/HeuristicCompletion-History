@@ -46,9 +46,7 @@ CooHistoryBenchmarksRunner class >> dryRunLoadingWithSession: aSession repositor
 CooHistoryBenchmarksRunner class >> dryRunMicrodown [
 	<script>
 	
-	CooSession resetProgramEntities.
-	CooSession current noUserSelectionHandling.
-	Transcript show: CooSession current reportString.
+	
 	
 	Smalltalk globals
 	at: #BaselineOfMicrodown 
@@ -61,7 +59,11 @@ CooHistoryBenchmarksRunner class >> dryRunMicrodown [
 		onUpgrade: [ :ex | ex useIncoming ];
 		load: #('All').
 	
-	(self newRunWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
+	CooSession resetProgramEntities.
+	CooSession current noUserSelectionHandling.
+	Transcript show: CooSession current reportString.
+	
+	(self dryRunLoadingWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
 	
 	Transcript show: CooSession current reportString
 	
