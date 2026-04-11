@@ -1,20 +1,20 @@
 Class {
-	#name : 'NewCooSessionFrequencyTest',
-	#superclass : 'NewCooSessionTest',
+	#name : 'CooSessionFrequencyTest',
+	#superclass : 'CooSessionTest',
 	#category : 'ExtendedHeuristicCompletion-History-Tests-Session',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
 	#tag : 'Session'
 }
 
 { #category : 'running' }
-NewCooSessionFrequencyTest >> setUp [
+CooSessionFrequencyTest >> setUp [
 
 	super setUp.
 	session := CooSession new programEntityHandler: CooFrequencyHandler new
 ]
 
-{ #category : 'running' }
-NewCooSessionFrequencyTest >> testHandler [
+{ #category : 'tests' }
+CooSessionFrequencyTest >> testHandler [
 
 	| anns |
 	anns := { 

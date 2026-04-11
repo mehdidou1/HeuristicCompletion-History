@@ -16,7 +16,7 @@ CooFrequencyRankingStabilityTest >> setUp [
 	handler := CooFrequencyHandler new
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testClassRankingReflectsFrequency [
 
 	4 timesRepeat: [
@@ -30,7 +30,7 @@ CooFrequencyRankingStabilityTest >> testClassRankingReflectsFrequency [
 	self assert: handler classEntries third contents equals: 'Panel'
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testInterleaveAddRemoveAddForMultipleSelectors [
 	"Interleaving add/remove/add across multiple selectors should leave a consistent state."
 
@@ -47,7 +47,7 @@ CooFrequencyRankingStabilityTest >> testInterleaveAddRemoveAddForMultipleSelecto
 	self deny: ((handler selectorEntries collect: [ :e | e selector ]) includes: #bar)
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testManySelectorsStaySorted [
 	"Add 20 selectors with different frequencies and verify sorting."
 
@@ -63,7 +63,7 @@ CooFrequencyRankingStabilityTest >> testManySelectorsStaySorted [
 	self assert: handler selectorEntries last selector equals: #method1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testModificationCountsAsFrequencyBump [
 	"A method added once then modified 4 times should have freq 5."
 
@@ -79,7 +79,7 @@ CooFrequencyRankingStabilityTest >> testModificationCountsAsFrequencyBump [
 	self assert: handler selectorEntries first selector equals: #evolving
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testRankingIsDeterministic [
 	"Adding the same items in the same order should always produce the same ranking."
 
@@ -97,7 +97,7 @@ CooFrequencyRankingStabilityTest >> testRankingIsDeterministic [
 		equals: (handler2 selectorEntries collect: [ :e | e selector ])
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testRankingReflectsFrequencyOrder [
 	"alpha: 3 times, beta: 2, gamma: 1 -> alpha > beta > gamma"
 
@@ -112,7 +112,7 @@ CooFrequencyRankingStabilityTest >> testRankingReflectsFrequencyOrder [
 	self assert: handler selectorEntries third selector equals: #gamma
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testRemoveAndReAddResetsFrequency [
 	"After removal, re-adding starts the count fresh at 1."
 
@@ -130,7 +130,7 @@ CooFrequencyRankingStabilityTest >> testRemoveAndReAddResetsFrequency [
 	self assert: handler selectorEntries second selector equals: #foo
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testRemovingNonExistentDoesNotAffectExisting [
 	"Removing a method that was never added should leave existing entries intact."
 
@@ -141,7 +141,7 @@ CooFrequencyRankingStabilityTest >> testRemovingNonExistentDoesNotAffectExisting
 	self assert: handler selectorEntries first selector equals: #existing
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooFrequencyRankingStabilityTest >> testTiedFrequenciesDoNotCrash [
 	"Multiple selectors with the same frequency should not cause errors."
 

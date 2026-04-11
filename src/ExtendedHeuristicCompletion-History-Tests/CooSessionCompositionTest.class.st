@@ -1,6 +1,6 @@
 Class {
 	#name : 'CooSessionCompositionTest',
-	#superclass : 'NewCooSessionTest',
+	#superclass : 'CooSessionTest',
 	#category : 'ExtendedHeuristicCompletion-History-Tests-Session',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
 	#tag : 'Session'

@@ -16,7 +16,7 @@ CooLRUHandlerEvictionTest >> setUp [
 	handler := CooLRUHandler new
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testClassLRUAlsoHas1000Capacity [
 	"Same capacity test for classes."
 
@@ -28,7 +28,7 @@ CooLRUHandlerEvictionTest >> testClassLRUAlsoHas1000Capacity [
 	self assert: handler classEntries size equals: 1000
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testDuplicateClassNamesAreDeduplicated [
 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
@@ -37,7 +37,7 @@ CooLRUHandlerEvictionTest >> testDuplicateClassNamesAreDeduplicated [
 	self assert: handler classEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testDuplicateSelectorsAreDeduplicated [
 	"Adding the same selector twice should result in 1 entry (LRU stores by key)."
 
@@ -47,7 +47,7 @@ CooLRUHandlerEvictionTest >> testDuplicateSelectorsAreDeduplicated [
 	self assert: handler selectorEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testEvictsOldestWhenCapacityExceeded [
 	"Fill up LRU to 1000, then add one more. The oldest entry should be evicted."
 
@@ -69,7 +69,7 @@ CooLRUHandlerEvictionTest >> testEvictsOldestWhenCapacityExceeded [
 	self assert: ((handler selectorEntries collect: [ :e | e selector ]) includes: #brandNewMethod)
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testReAccessingUpdatesLRUEntry [
 	"Re-adding the same selector should update its value (the item)."
 
@@ -84,7 +84,7 @@ CooLRUHandlerEvictionTest >> testReAccessingUpdatesLRUEntry [
 	self assert: handler selectorEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testSelectorAndClassLRUAreIndependent [
 	"Filling up the selector LRU should not affect the class LRU."
 
@@ -100,7 +100,7 @@ CooLRUHandlerEvictionTest >> testSelectorAndClassLRUAreIndependent [
 	self assert: handler classEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testSingleClassItem [
 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
@@ -109,7 +109,7 @@ CooLRUHandlerEvictionTest >> testSingleClassItem [
 	self assert: handler classEntries first contents equals: 'Widget'
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooLRUHandlerEvictionTest >> testSingleMethodItem [ 
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().

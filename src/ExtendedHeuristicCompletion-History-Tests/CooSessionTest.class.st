@@ -1,5 +1,5 @@
 Class {
-	#name : 'NewCooSessionTest',
+	#name : 'CooSessionTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'session'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'origins' }
-NewCooSessionTest >> programEntityHandler [
+CooSessionTest >> programEntityHandler [
 
 	^ session programEntityHandler
 ]

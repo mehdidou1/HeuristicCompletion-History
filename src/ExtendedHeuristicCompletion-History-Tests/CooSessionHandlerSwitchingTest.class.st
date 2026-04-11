@@ -1,18 +1,18 @@
 Class {
 	#name : 'CooSessionHandlerSwitchingTest',
-	#superclass : 'NewCooSessionTest',
+	#superclass : 'CooSessionTest',
 	#category : 'ExtendedHeuristicCompletion-History-Tests-Handlers',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
 	#tag : 'Handlers'
 }
 
-{ #category : 'adding' }
+{ #category : 'running' }
 CooSessionHandlerSwitchingTest >> addMethodItems: aCollection [
 
 	aCollection do: [ :each | session addMethodItem: each ]
 ]
 
-{ #category : 'adding' }
+{ #category : 'running' }
 CooSessionHandlerSwitchingTest >> makeMethodItem: aSelector className: aClassName [
 
 	^ CooModifiedMethodHistoryItem new
@@ -23,14 +23,14 @@ CooSessionHandlerSwitchingTest >> makeMethodItem: aSelector className: aClassNam
 		  yourself
 ]
 
-{ #category : 'adding' }
+{ #category : 'running' }
 CooSessionHandlerSwitchingTest >> setUp [
 
 	super setUp.
 	session := CooSession new programEntityHandler: CooTemporalHandler new
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testDoubleShiftRoundTripsCorrectly [
 	"Temporal -> Frequency -> Temporal should restore all items"
 
@@ -47,7 +47,7 @@ CooSessionHandlerSwitchingTest >> testDoubleShiftRoundTripsCorrectly [
 	self assert: session selectorEntries size equals: 3
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testFrequencyToTemporalExpandsBack [
 	"Start with Frequency (deduplicates), then switch to Temporal (keeps all).
 	 Since shiftHandlerTo re-feeds all methodDescriptions, Temporal should show all items."
@@ -69,7 +69,7 @@ CooSessionHandlerSwitchingTest >> testFrequencyToTemporalExpandsBack [
 	self assert: session selectorEntries size equals: 3
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testShiftAlsoRePopulatesClassItems [
 
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Point'; yourself).
@@ -83,7 +83,7 @@ CooSessionHandlerSwitchingTest >> testShiftAlsoRePopulatesClassItems [
 	self assert: session programEntityHandler classEntries first contents equals: 'Point'
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testShiftPreservesMethodDescriptions [
 	"The raw methodDescriptions should be untouched regardless of handler switches."
 
@@ -102,7 +102,7 @@ CooSessionHandlerSwitchingTest >> testShiftPreservesMethodDescriptions [
 	self assert: session methodDescriptions size equals: 3
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testShiftWithEmptySessionDoesNotBreak [
 
 	session shiftHandlerTo: CooFrequencyHandler new.
@@ -110,7 +110,7 @@ CooSessionHandlerSwitchingTest >> testShiftWithEmptySessionDoesNotBreak [
 	self assert: session programEntityHandler classEntries size equals: 0
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testTemporalToFrequencyDeduplicates [
 	"Temporal keeps all 4 items. Frequency should collapse to 2 unique selectors,
 	 ranked by frequency: degrees(3) > debt(1)."
@@ -132,7 +132,7 @@ CooSessionHandlerSwitchingTest >> testTemporalToFrequencyDeduplicates [
 		equals: #(#degrees #debt) asOrderedCollection
 ]
 
-{ #category : 'adding' }
+{ #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testTemporalToLRUDeduplicates [
 	"LRU should also deduplicate since it stores by key."
 

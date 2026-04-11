@@ -9,13 +9,13 @@ Class {
 	#tag : 'Handlers'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDualMostRecentFrequencyHandlerTest >> fakeEntryWithContents: aString [
 
 	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDualMostRecentFrequencyHandlerTest >> fakeInteractionItemWithToken: aToken selectedIndex: anIndex choices: aCollection [
 
 	| item |
@@ -26,14 +26,14 @@ CooDualMostRecentFrequencyHandlerTest >> fakeInteractionItemWithToken: aToken se
 	^ item
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDualMostRecentFrequencyHandlerTest >> setUp [
 
 	super setUp.
 	handler := CooDualMostRecentFrequencyHandler new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testAddingUppercaseDoesNotDecayLowercase [
 
 	| selectorEntry classEntry selectorItem classItem |
@@ -49,7 +49,7 @@ CooDualMostRecentFrequencyHandlerTest >> testAddingUppercaseDoesNotDecayLowercas
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'collect:'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testDecayWithinLowercaseDict [ 
 
 	| entryA entryB itemA itemB |
@@ -63,7 +63,7 @@ CooDualMostRecentFrequencyHandlerTest >> testDecayWithinLowercaseDict [
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'beta'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testDecayWithinUppercaseDict [
 
 	| entryA entryB itemA itemB |
@@ -77,14 +77,14 @@ CooDualMostRecentFrequencyHandlerTest >> testDecayWithinUppercaseDict [
 	self assert: handler sortedUserUppercasedEntries first contents equals: 'Bag'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testEmptyHandlerReturnsEmptyForBothCases [
 
 	self assert: handler sortedUserLowercasedEntries isEmpty.
 	self assert: handler sortedUserUppercasedEntries isEmpty
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testLowercaseAndUppercaseAreSeparateWorlds [
 
 	| selectorEntry classEntry selectorItem classItem |
@@ -102,7 +102,7 @@ CooDualMostRecentFrequencyHandlerTest >> testLowercaseAndUppercaseAreSeparateWor
 	self assert: handler sortedUserUppercasedEntries size equals: 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testLowercaseTokenGoesToLowercaseDictionary [ 
 
 	| entry item |
@@ -115,7 +115,7 @@ CooDualMostRecentFrequencyHandlerTest >> testLowercaseTokenGoesToLowercaseDictio
 	self assert: handler sortedUserUppercasedEntries isEmpty
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testSortedUserLowercasedEntriesCapsAt5 [
 
 	(1 to: 8) do: [ :i |
@@ -127,7 +127,7 @@ CooDualMostRecentFrequencyHandlerTest >> testSortedUserLowercasedEntriesCapsAt5 
 	self assert: handler sortedUserLowercasedEntries size equals: 5
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testSortedUserUppercasedEntriesCapsAt5 [
 
 	(1 to: 8) do: [ :i |
@@ -139,7 +139,7 @@ CooDualMostRecentFrequencyHandlerTest >> testSortedUserUppercasedEntriesCapsAt5 
 	self assert: handler sortedUserUppercasedEntries size equals: 5
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDualMostRecentFrequencyHandlerTest >> testUppercaseTokenGoesToUppercaseDictionary [
 
 	| entry item |

@@ -1,20 +1,20 @@
 Class {
-	#name : 'NewCooSessionLRUTest',
-	#superclass : 'NewCooSessionTest',
+	#name : 'CooSessionLRUTest',
+	#superclass : 'CooSessionTest',
 	#category : 'ExtendedHeuristicCompletion-History-Tests-Session',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
 	#tag : 'Session'
 }
 
 { #category : 'running' }
-NewCooSessionLRUTest >> setUp [
+CooSessionLRUTest >> setUp [
 
 	super setUp.
 	session := CooSession new programEntityHandler: CooLRUHandler new
 ]
 
 { #category : 'tests' }
-NewCooSessionLRUTest >> testHandler [
+CooSessionLRUTest >> testHandler [
 
 	| anns |
 	anns := {
@@ -72,7 +72,7 @@ NewCooSessionLRUTest >> testHandler [
 ]
 
 { #category : 'tests' }
-NewCooSessionLRUTest >> testHandlerSaturate [
+CooSessionLRUTest >> testHandlerSaturate [
 
 	2 timesRepeat: [ 
 		1 to: 1000 do: [ :i |

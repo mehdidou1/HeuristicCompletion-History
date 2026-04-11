@@ -1,6 +1,6 @@
 Class {
 	#name : 'CooSessionLifecycleTest',
-	#superclass : 'NewCooSessionTest',
+	#superclass : 'CooSessionTest',
 	#category : 'ExtendedHeuristicCompletion-History-Tests-Handlers',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
 	#tag : 'Handlers'
@@ -13,7 +13,7 @@ CooSessionLifecycleTest >> setUp [
 	session := CooSession new programEntityHandler: CooTemporalHandler new
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testAddAndRemoveClassClearsEntries [
 
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'MyWidget'; yourself).
@@ -26,7 +26,7 @@ CooSessionLifecycleTest >> testAddAndRemoveClassClearsEntries [
 	self assert: self programEntityHandler classEntries size equals: 0
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testAddModifyRemoveAddLifecycle [
 	"Simulate a method being added, modified several times, removed, then re-added.
 	 The temporal handler should clear history on remove, then have just the re-added one."
@@ -48,7 +48,7 @@ CooSessionLifecycleTest >> testAddModifyRemoveAddLifecycle [
 	self assert: self programEntityHandler selectorEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testExistingMethodDescriptionsFiltersRemovedMethods [
 	"existingMethodDescriptions should exclude methods that were later removed."
 
@@ -60,7 +60,7 @@ CooSessionLifecycleTest >> testExistingMethodDescriptionsFiltersRemovedMethods [
 	self assert: session existingMethodDescriptions anyOne selector equals: #bar
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testExistingMethodDescriptionsWithNoRemovals [
 
 	session addMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'MyClass'; timestamp: DateAndTime now; yourself).
@@ -70,7 +70,7 @@ CooSessionLifecycleTest >> testExistingMethodDescriptionsWithNoRemovals [
 	self assert: session existingMethodDescriptions size equals: 2
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testMethodsAndClassesAreSeparateCollections [
 	"Adding methods should not affect class entries and vice versa."
 
@@ -83,7 +83,7 @@ CooSessionLifecycleTest >> testMethodsAndClassesAreSeparateCollections [
 	self assert: self programEntityHandler classEntries size equals: 1
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testNewSessionStartsEmpty [
 
 	self assert: session methodDescriptions isEmpty.
@@ -92,7 +92,7 @@ CooSessionLifecycleTest >> testNewSessionStartsEmpty [
 	self assert: self programEntityHandler classEntries isEmpty
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testRemoveClassKeepsOtherClasses [
 
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
@@ -104,7 +104,7 @@ CooSessionLifecycleTest >> testRemoveClassKeepsOtherClasses [
 	self assert: self programEntityHandler classEntries first contents equals: 'Button'
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testRemoveOneMethodKeepsOthers [
 	"Removing method #foo should not affect method #bar."
 
@@ -118,7 +118,7 @@ CooSessionLifecycleTest >> testRemoveOneMethodKeepsOthers [
 	self assert: self programEntityHandler selectorEntries first selector equals: #bar
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testResetProgramEntitiesClearsEverything [
 
 	session addMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'MyClass'; yourself).
@@ -130,7 +130,7 @@ CooSessionLifecycleTest >> testResetProgramEntitiesClearsEverything [
 	self assert: session classDescriptions isEmpty
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooSessionLifecycleTest >> testSameMethodNameDifferentClassesAreIndependent [
 	"#foo in ClassA and #foo in ClassB are different methods.
 	 Removing #foo from ClassA should not remove #foo from ClassB."

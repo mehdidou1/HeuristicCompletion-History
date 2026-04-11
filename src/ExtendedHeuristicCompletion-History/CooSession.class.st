@@ -123,12 +123,16 @@ CooSession class >> todos [
 
 ^ '- loading code element should be tagged as live
 - check the protocol to add element to the handler
-- implement LRU
+- [x] implement LRU
 - check more history handler
 - what about the information stored in the completionItem (the class but we need a symbol to give feedback when we reuse them)
-- filling up the repo.
-- what is happening when we remove a class
-- TemporalselectorEntries is unclear. '
+- [~] filling up the repo.
+- [ON IT] what is happening when we remove a class
+
+
+Pharo 
+- remove CoASTSession....
+'
 ]
 
 { #category : 'instance creation' }

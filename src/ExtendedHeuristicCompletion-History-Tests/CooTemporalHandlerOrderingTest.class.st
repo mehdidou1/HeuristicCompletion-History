@@ -16,7 +16,7 @@ CooTemporalHandlerOrderingTest >> setUp [
 	handler := CooTemporalHandler new
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testClassesAreNewestFirst [
 	"The most recently added class should appear first in classEntries."
 
@@ -27,7 +27,7 @@ CooTemporalHandlerOrderingTest >> testClassesAreNewestFirst [
 	self assert: handler classEntries second contents equals: 'Alpha'
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testInterleavedClassAndMethodOperations [
 	"Adding classes and methods interleaved should maintain independence."
 
@@ -44,7 +44,7 @@ CooTemporalHandlerOrderingTest >> testInterleavedClassAndMethodOperations [
 	self assert: handler selectorEntries first selector equals: #click
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems [
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
@@ -54,7 +54,7 @@ CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems [
 	self assert: handler size equals: 2
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testMethodsAreNewestFirst [
 	"The most recently added method should appear first in selectorEntries."
 
@@ -70,7 +70,7 @@ CooTemporalHandlerOrderingTest >> testMethodsAreNewestFirst [
 	self assert: handler selectorEntries second selector equals: #alpha
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testModifiedMethodKeepsTemporalOrder [
 	"Modifying a method that was previously added should place the modification first."
 
@@ -82,7 +82,7 @@ CooTemporalHandlerOrderingTest >> testModifiedMethodKeepsTemporalOrder [
 	self assert: handler methodDescriptions first class equals: CooModifiedMethodHistoryItem
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testRemovalDeletesAllMatchingByClassAndSelector [
 	"Removing a method should delete ALL history entries with that class+selector combo."
 
@@ -98,7 +98,7 @@ CooTemporalHandlerOrderingTest >> testRemovalDeletesAllMatchingByClassAndSelecto
 	self assert: handler selectorEntries isEmpty
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testRemovalOnlyAffectsMatchingClassAndSelector [
 	"#foo in ClassA is different from #foo in ClassB. Removing A>>foo should not touch B>>foo."
 

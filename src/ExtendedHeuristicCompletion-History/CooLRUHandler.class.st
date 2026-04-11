@@ -19,7 +19,7 @@ CooLRUHandler >> classEntries [
 	classLRU keysAndValuesDo: [ :k :v |
 			col add: ((CoSessionGlobalEntry contents: v nameOfClass node: nil)
 					 sessionItem: v;
-					 fetcherName: 'Session LRU' class name;
+					 fetcherName: 'Session LRU';
 					 yourself) ].
 	^ col
 ]
@@ -53,7 +53,7 @@ CooLRUHandler >> selectorEntries [
 	selectorLRU keysAndValuesDo: [ :k :v |
 			col add: ((CoSessionSelectorEntry contents: v selector node: nil)
 					 sessionItem: v;
-					 fetcherName: 'Session LRU' class name;
+					 fetcherName: 'Session LRU';
 					 yourself) ].
 	^ col
 ]

@@ -21,7 +21,7 @@ CooHandlerPolymorphismTest >> methodItem: aSelector class: aClassName event: anE
 		  yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedClass [
 	"Every handler must accept an added class item without error."
 
@@ -33,7 +33,7 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedClass [
 		self assert: h classEntries isNotEmpty description: handlerClass name, ' did not register added class' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedMethod [
 	"Every handler must accept an added method item without error."
 
@@ -45,7 +45,7 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedMethod [
 		self assert: h selectorEntries isNotEmpty description: handlerClass name, ' did not register added method' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersAcceptModifiedMethod [
 	"Every handler must accept a modified method item without error."
 
@@ -57,7 +57,7 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptModifiedMethod [
 		self assert: h selectorEntries isNotEmpty description: handlerClass name, ' lost entries after modification' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersReturnEmptyCollectionsWhenFresh [
 	"Every handler must return empty collections for both selector and class entries
 	 when no items have been added."
@@ -69,7 +69,7 @@ CooHandlerPolymorphismTest >> testAllHandlersReturnEmptyCollectionsWhenFresh [
 		self assert: h classEntries isEmpty description: handlerClass name, ' classEntries not empty when fresh' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersReturnNECEntries [
 	"All handlers must return entries that respond to #contents for selectors and classes."
 
@@ -85,7 +85,7 @@ CooHandlerPolymorphismTest >> testAllHandlersReturnNECEntries [
 			self assert: (entry respondsTo: #contents) description: handlerClass name, ' classEntry does not respond to #contents' ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testAllHandlersSelectorEntriesRespondToSelector [
 	"Selector entries should respond to #selector."
 
@@ -97,7 +97,7 @@ CooHandlerPolymorphismTest >> testAllHandlersSelectorEntriesRespondToSelector [
 			self assert: (entry respondsTo: #selector) description: handlerClass name, ' entry does not respond to #selector' ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testRemoveClassDoesNotCrashAnyHandler [
 
 	self allHandlerClasses do: [ :handlerClass |
@@ -110,7 +110,7 @@ CooHandlerPolymorphismTest >> testRemoveClassDoesNotCrashAnyHandler [
 			do: [ :e | self fail: handlerClass name, ' crashed on remove of non-existent class: ', e messageText ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testRemoveThenQueryDoesNotCrashAnyHandler [
 	"Removing from an empty handler, or removing something never added, should not crash."
 
@@ -125,7 +125,7 @@ CooHandlerPolymorphismTest >> testRemoveThenQueryDoesNotCrashAnyHandler [
 			do: [ :e | self fail: handlerClass name, ' crashed on remove of non-existent method: ', e messageText ] ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooHandlerPolymorphismTest >> testSessionShiftPreservesDataForAllHandlerPairs [
 	"Shifting from any handler to any other handler via CooSession should not lose methodDescriptions."
 

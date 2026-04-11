@@ -9,13 +9,13 @@ Class {
 	#tag : 'Handlers'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDecayConvergenceTest >> fakeEntryWithContents: aString [
 
 	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDecayConvergenceTest >> fakeInteractionItemWithToken: aToken selectedIndex: anIndex choices: aCollection [
 
 	| item |
@@ -26,14 +26,14 @@ CooDecayConvergenceTest >> fakeInteractionItemWithToken: aToken selectedIndex: a
 	^ item
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'running' }
 CooDecayConvergenceTest >> setUp [
 
 	super setUp.
 	handler := CooMostRecentFrequencyHandler new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testAncientEntryBecomesNegligibleAfterManyInsertions [
 	"An entry selected once, then 20 different entries are added, should have
 	 its frequency decayed to near zero: 1 * 0.5^20 ~ 0.00000095"
@@ -54,7 +54,7 @@ CooDecayConvergenceTest >> testAncientEntryBecomesNegligibleAfterManyInsertions 
 	self assert: handler sortedRecentChoices last contents equals: 'ancient'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testComebackEntryOvertakesDecayedLeader [
 	"Entry A is selected 5 times, then B is selected 10 times.
 	 A gets decayed 10 times. Then A is selected again 3 more times.
@@ -76,7 +76,7 @@ CooDecayConvergenceTest >> testComebackEntryOvertakesDecayedLeader [
 	self assert: handler sortedRecentChoices first contents equals: 'comeback'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testDecayIsMultiplicativeNotAdditive [
 	"After 3 insertions of different items, the first item's frequency should be
 	 1 * 0.5 * 0.5 = 0.25, NOT 1 - 0.5 - 0.5 = 0"
@@ -97,7 +97,7 @@ CooDecayConvergenceTest >> testDecayIsMultiplicativeNotAdditive [
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'alpha' ])
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testDecayNeverProducesNegativeFrequency [
 	"No matter how many different entries are added, existing entries should
 	 never go negative. Frequency = original * 0.5^N which is always positive."
@@ -119,7 +119,7 @@ CooDecayConvergenceTest >> testDecayNeverProducesNegativeFrequency [
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'sentinel' ])
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testHighFrequencyEntryResistsDecay [
 	"An entry selected 100 times should survive 5 subsequent new entries.
 	 Accumulated freq: sum of geometric series ~ 2*(1-0.5^100) ~ 2,
@@ -142,7 +142,7 @@ CooDecayConvergenceTest >> testHighFrequencyEntryResistsDecay [
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'heavyweight' ])
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testRepeatedSelectionOfSameEntryConverges [
 	"Selecting the same entry N times: freq = sum(0.5^i, i=0..N-1).
 	 This converges to 2 as N -> infinity. Verify it stays bounded."
@@ -157,7 +157,7 @@ CooDecayConvergenceTest >> testRepeatedSelectionOfSameEntryConverges [
 	self assert: handler sortedRecentChoices size equals: 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'tests' }
 CooDecayConvergenceTest >> testTwoEntryOscillationReachesEquilibrium [
 	"Alternating between two entries should eventually give them similar frequencies.
 	 After many alternations, neither should dominate hugely."
