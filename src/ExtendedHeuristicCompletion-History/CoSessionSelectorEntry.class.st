@@ -1,32 +1,32 @@
 "
 I'm a subclass of Selector because I need to pass extra information. 
-In the future NECEntry should be more extensible.
+In the future `CoEntry` should be more extensible.
 "
 Class {
-	#name : 'NECSessionSelectorEntry',
+	#name : 'CoSessionSelectorEntry',
 	#superclass : 'NECSelectorEntry',
 	#instVars : [
 		'sessionItem'
 	],
-	#category : 'ExtendedHeuristicCompletion-History-NEC',
+	#category : 'ExtendedHeuristicCompletion-History-Completion-Entries',
 	#package : 'ExtendedHeuristicCompletion-History',
-	#tag : 'NEC'
+	#tag : 'Completion-Entries'
 }
 
 { #category : 'accessing' }
-NECSessionSelectorEntry >> deltaMessages [ 
+CoSessionSelectorEntry >> deltaMessages [ 
 	
 	^ sessionItem deltaMessages 
 ]
 
 { #category : 'accessing' }
-NECSessionSelectorEntry >> sessionItem [
+CoSessionSelectorEntry >> sessionItem [
 
 	^ sessionItem 
 ]
 
 { #category : 'accessing' }
-NECSessionSelectorEntry >> sessionItem: aSessionItem [
+CoSessionSelectorEntry >> sessionItem: aSessionItem [
 
 	sessionItem := aSessionItem
 ]

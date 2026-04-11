@@ -12,7 +12,7 @@ Class {
 { #category : 'as yet unclassified' }
 CooDualMostRecentFrequencyHandlerTest >> fakeEntryWithContents: aString [
 
-	^ NECSessionSelectorEntry contents: aString node: nil
+	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
 { #category : 'as yet unclassified' }

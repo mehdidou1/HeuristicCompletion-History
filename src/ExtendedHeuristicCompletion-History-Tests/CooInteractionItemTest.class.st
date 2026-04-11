@@ -21,9 +21,9 @@ CooInteractionItemTest >> testFetchersAreStored [
 CooInteractionItemTest >> testSelectedItemEntryReturnsChoiceAtIndex [
 
 	| item entry1 entry2 entry3 |
-	entry1 := NECSessionSelectorEntry contents: 'alpha' node: nil.
-	entry2 := NECSessionSelectorEntry contents: 'beta' node: nil.
-	entry3 := NECSessionSelectorEntry contents: 'gamma' node: nil.
+	entry1 := CoSessionSelectorEntry contents: 'alpha' node: nil.
+	entry2 := CoSessionSelectorEntry contents: 'beta' node: nil.
+	entry3 := CoSessionSelectorEntry contents: 'gamma' node: nil.
 
 	item := CooInteractionItem new.
 	item choices: { entry1. entry2. entry3 }.
@@ -37,8 +37,8 @@ CooInteractionItemTest >> testSelectedItemStringReturnsChoiceAtIndex [
 	"selectedItemString should be equivalent to selectedItemEntry"
 
 	| item entry1 entry2 |
-	entry1 := NECSessionSelectorEntry contents: 'alpha' node: nil.
-	entry2 := NECSessionSelectorEntry contents: 'beta' node: nil.
+	entry1 := CoSessionSelectorEntry contents: 'alpha' node: nil.
+	entry2 := CoSessionSelectorEntry contents: 'beta' node: nil.
 
 	item := CooInteractionItem new.
 	item choices: { entry1. entry2 }.

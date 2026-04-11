@@ -12,13 +12,13 @@ Class {
 { #category : 'as yet unclassified' }
 CooInteractionAndSelectionIntegrationTest >> fakeEntryWithContents: aString [
 
-	^ NECSessionSelectorEntry contents: aString node: nil
+	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
 { #category : 'as yet unclassified' }
 CooInteractionAndSelectionIntegrationTest >> fakeGlobalEntryWithContents: aString [
 
-	^ NECSessionGlobalEntry contents: aString node: nil
+	^ CoSessionGlobalEntry contents: aString node: nil
 ]
 
 { #category : 'as yet unclassified' }

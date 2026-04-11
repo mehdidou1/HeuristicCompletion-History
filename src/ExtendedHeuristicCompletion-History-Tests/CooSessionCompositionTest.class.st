@@ -9,13 +9,13 @@ Class {
 { #category : 'running' }
 CooSessionCompositionTest >> fakeEntryWithContents: aString [
 
-	^ NECSessionSelectorEntry contents: aString node: nil
+	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
 { #category : 'running' }
 CooSessionCompositionTest >> fakeGlobalEntryWithContents: aString [
 
-	^ NECSessionGlobalEntry contents: aString node: nil
+	^ CoSessionGlobalEntry contents: aString node: nil
 ]
 
 { #category : 'running' }

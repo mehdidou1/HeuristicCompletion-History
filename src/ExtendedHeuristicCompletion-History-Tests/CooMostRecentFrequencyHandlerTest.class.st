@@ -13,7 +13,7 @@ Class {
 CooMostRecentFrequencyHandlerTest >> fakeEntryWithContents: aString [
 	"Create a minimal mock entry object that responds to #contents."
 
-	^ NECSessionSelectorEntry contents: aString node: nil
+	^ CoSessionSelectorEntry contents: aString node: nil
 ]
 
 { #category : 'running' }
