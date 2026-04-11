@@ -17,7 +17,7 @@ CooLRUHandler >> classEntries [
 	| col |
 	col := OrderedCollection new.
 	classLRU keysAndValuesDo: [ :k :v |
-			col add: ((NECSessionGlobalEntry contents: v nameOfClass node: nil)
+			col add: ((CoSessionGlobalEntry contents: v nameOfClass node: nil)
 					 sessionItem: v;
 					 fetcherName: 'Session LRU' class name;
 					 yourself) ].
@@ -51,7 +51,7 @@ CooLRUHandler >> selectorEntries [
 	| col |
 	col := OrderedCollection new.
 	selectorLRU keysAndValuesDo: [ :k :v |
-			col add: ((NECSessionSelectorEntry contents: v selector node: nil)
+			col add: ((CoSessionSelectorEntry contents: v selector node: nil)
 					 sessionItem: v;
 					 fetcherName: 'Session LRU' class name;
 					 yourself) ].

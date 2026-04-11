@@ -22,7 +22,7 @@ Class {
 CooFrequencyHandler >> classEntries [
 
 	^ (classFrequencyDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (NECSessionGlobalEntry contents: each key node: nil)
+			  (CoSessionGlobalEntry contents: each key node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Frequency' class name ]
 ]
@@ -86,7 +86,7 @@ CooFrequencyHandler >> initialize [
 CooFrequencyHandler >> selectorEntries [
 
 	^ (selectorFrequenceDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (NECSessionSelectorEntry contents: each key node: nil)
+			  (CoSessionSelectorEntry contents: each key node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Frequency' class name ]
 ]

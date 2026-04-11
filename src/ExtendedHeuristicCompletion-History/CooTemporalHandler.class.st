@@ -44,7 +44,7 @@ CooTemporalHandler >> classEntries [
 	"
 
 	^ classDescriptions collect: [ :each |
-			  (NECSessionGlobalEntry contents: each nameOfClass node: nil)
+			  (CoSessionGlobalEntry contents: each nameOfClass node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Temporal' class name ]
 ]
@@ -120,7 +120,7 @@ CooTemporalHandler >> registerSelector: aSelector ast: anAst event: anEventSymbo
 CooTemporalHandler >> selectorEntries [
 
 	^ (methodDescriptions reject: [ :each | each event = #removed ]) collect: [ :each |
-			  (NECSessionSelectorEntry contents: each selector node: nil)
+			  (CoSessionSelectorEntry contents: each selector node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Temporal' class name ]
 ]
