@@ -40,8 +40,8 @@ CooSessionTemporalTest >> ourOriginalPrintString [
 CooSessionTemporalTest >> removedMethodAnnouncement [
 
 	^ MethodRemoved new
-		  methodOrigin: NewCooSessionTemporalTest;
-		  method: NewCooSessionTemporalTest >> #ourModifiedPrintString
+		  methodOrigin: CooSessionTemporalTest;
+		  method: CooSessionTemporalTest >> #ourModifiedPrintString
 ]
 
 { #category : 'running' }
@@ -107,7 +107,7 @@ CooSessionTemporalTest >> testAnnouncementAddNewVariableAnnouncementRegistersEnt
 
 	| announcement entry |
 	announcement := ClassAdded new
-		classAdded: NewCooSessionTemporalTest;
+		classAdded: CooSessionTemporalTest;
 		yourself.
 	session addNewClassInVocabulary: announcement.
 

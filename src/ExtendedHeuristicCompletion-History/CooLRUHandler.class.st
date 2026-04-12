@@ -1,3 +1,9 @@
+"
+I keep the information in Least Recent Usage cache. It means that when my caches saturates I removed the least used information. 
+I have a separated cache for methods and classes.
+
+
+"
 Class {
 	#name : 'CooLRUHandler',
 	#superclass : 'CooProgramEntityHandler',

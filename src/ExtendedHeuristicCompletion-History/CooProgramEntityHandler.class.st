@@ -1,3 +1,6 @@
+"
+I'm the root of the program entity handlers: a handler is basically a strategy that treat specifically elements (added/removed/modified methods or classes).
+"
 Class {
 	#name : 'CooProgramEntityHandler',
 	#superclass : 'Object',

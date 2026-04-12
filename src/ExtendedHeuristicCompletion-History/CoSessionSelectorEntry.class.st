@@ -4,7 +4,7 @@ In the future `CoEntry` should be more extensible.
 "
 Class {
 	#name : 'CoSessionSelectorEntry',
-	#superclass : 'NECSelectorEntry',
+	#superclass : 'CoSelectorEntry',
 	#instVars : [
 		'sessionItem'
 	],

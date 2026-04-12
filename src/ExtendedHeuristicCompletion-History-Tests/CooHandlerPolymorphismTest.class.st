@@ -6,13 +6,13 @@ Class {
 	#tag : 'Handlers'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'helpers' }
 CooHandlerPolymorphismTest >> allHandlerClasses [
 
 	^ { CooTemporalHandler. CooFrequencyHandler. CooLRUHandler }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'helpers' }
 CooHandlerPolymorphismTest >> methodItem: aSelector class: aClassName event: anEventClass [
 
 	^ anEventClass new

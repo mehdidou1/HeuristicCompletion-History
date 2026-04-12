@@ -22,6 +22,14 @@ selectorEntries
 	
 	^ userSelectionHandler sortedUserEntries,  programEntityHandler selectorEntries
 ```
+
+### Current implementation
+
+To be able to produce benchmarks I keep track of all the information program entities as well as interaction.
+In addition to the information kept in handlers. This redundancy is just to be able to replay different handlers on the same data. In the future it should be removed.
+ 
+This supports the switch and rebuild of handler data. Now this collection of all the history is not good for production level. In normal execution we can expect that the session does not hold any information but that the event are passed directly to the current handlers.
+
 "
 Class {
 	#name : 'CooSession',
@@ -97,7 +105,7 @@ CooSession class >> install [
 	We should probably handle the fact that the user may not select and cancel the prompt."	
 		
 	codeAnnouncer 
-		when: CompletionItemSelected
+		when: CoCompletionItemSelected
 		send: #addCompletionItem: 
 		to: self current. 
 		

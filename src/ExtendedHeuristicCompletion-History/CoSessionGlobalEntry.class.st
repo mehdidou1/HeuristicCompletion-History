@@ -4,7 +4,7 @@ In the future CoEntry should be more extensible.
 "
 Class {
 	#name : 'CoSessionGlobalEntry',
-	#superclass : 'NECGlobalEntry',
+	#superclass : 'CoGlobalEntry',
 	#instVars : [
 		'sessionItem'
 	],

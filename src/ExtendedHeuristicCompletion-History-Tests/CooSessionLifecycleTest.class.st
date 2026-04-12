@@ -52,9 +52,21 @@ CooSessionLifecycleTest >> testAddModifyRemoveAddLifecycle [
 CooSessionLifecycleTest >> testExistingMethodDescriptionsFiltersRemovedMethods [
 	"existingMethodDescriptions should exclude methods that were later removed."
 
-	session addMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'MyClass'; timestamp: DateAndTime now; yourself).
-	session addMethodItem: (CooAddedMethodHistoryItem new selector: #bar; nameOfClass: 'MyClass'; timestamp: DateAndTime now; yourself).
-	session addMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'MyClass'; timestamp: DateAndTime now; yourself).
+	session addMethodItem: (CooAddedMethodHistoryItem new 
+		selector: #foo; 
+		nameOfClass: 'MyClass'; 
+		timestamp: DateAndTime now; 
+		yourself).
+	session addMethodItem: (CooAddedMethodHistoryItem new 
+		selector: #bar; 
+		nameOfClass: 'MyClass'; 
+		timestamp: DateAndTime now; 
+		yourself).
+	session addMethodItem: (CooRemovedMethodHistoryItem new 
+		selector: #foo; 
+		nameOfClass: 'MyClass'; 
+		timestamp: DateAndTime now; 
+		yourself).
 
 	self assert: session existingMethodDescriptions size equals: 1.
 	self assert: session existingMethodDescriptions anyOne selector equals: #bar
