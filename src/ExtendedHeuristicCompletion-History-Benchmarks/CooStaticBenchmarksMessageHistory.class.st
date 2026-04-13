@@ -16,42 +16,24 @@ Class {
 }
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksMessageHistory >> cachedSelectors [
+CooStaticBenchmarksMessageHistory >> deltaMessageSelectors [
 
 	| entries |
 	entries := self session programEntityHandler selectorEntries ifNil: [ #(  ) ].
 	^ (entries flatCollect: [ :each | each deltaMessages ]) asSet
 ]
 
-{ #category : 'benchmarks' }
-CooStaticBenchmarksMessageHistory >> methodsInScopeDo: aBlock [
-
-	(scope respondsTo: #methodsDo:)
-		ifTrue: [ ^ scope methodsDo: aBlock ].
-	(scope respondsTo: #definedClasses)
-		ifTrue: [ ^ scope definedClasses do: [ :class |
-			class methodsDo: aBlock ] ].
-	(scope respondsTo: #do:)
-		ifTrue: [ ^ scope do: [ :each |
-				(each respondsTo: #methodsDo:)
-				ifTrue: [ each methodsDo: aBlock ]
-				ifFalse: [ (each respondsTo: #definedClasses)
-					ifTrue: [ each definedClasses do: [ :class | class methodsDo: aBlock ] ] ] ] ].
-	self error:
-		'Scope does not support method enumeration. Pass a package, class, or collection of them.'
-]
-
 { #category : 'running' }
 CooStaticBenchmarksMessageHistory >> run [
 
 	| cachedSelectors pos scannedMethods matchedCallsites |
-	cachedSelectors := self cachedSelectors.
+	cachedSelectors := self deltaMessageSelectors.
 	scannedMethods := 0.
 	matchedCallsites := 0.
 	
 	"we should look for the methods that are in the history and not in the package.
 	Because the bench is simulating a dev behavior. We are only interested in added, modified methods. "
-	"Notice however that within the history, when a class is removed its method in the history description should be removed too. "	
+
 	Transcript cr; show: '# Running Message Benchmark'.
 	
 	self session existingMethods do: [ :method |

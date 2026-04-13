@@ -284,16 +284,21 @@ CooSession >> existingMethodDescriptions [
 CooSession >> existingMethods [
 	"pay attention this requires that the classes are loaded in Pharo."
 
-	^ self existingMethodDescriptions collect: [ :each |
-			  | metaclass clss |
-			  metaclass := false.
-			  clss := each nameOfClass.
-			  (each nameOfClass endsWith: ' class') ifTrue: [
-					  metaclass := true.
-					  clss := each nameOfClass allButLast: 6 ].
-			  metaclass
-				  ifTrue: [ (self class environment at: clss asSymbol) class >> each selector ]
-				  ifFalse: [ (self class environment at: clss asSymbol) >> each selector ] ]
+	| col |
+	col := OrderedCollection new. 
+	
+	self existingMethodDescriptions do: [ :each |
+		| metaclass clss |
+		metaclass := false.
+		clss := each nameOfClass.
+		(each nameOfClass endsWith: ' class') ifTrue: [
+			metaclass := true.
+			clss := each nameOfClass allButLast: 6 ].
+			self class environment at: clss asSymbol ifPresent: [ :myClass |
+				col add: (metaclass
+					ifTrue: [ (self class environment at: clss asSymbol) class >> each selector ]
+				   ifFalse: [ (self class environment at: clss asSymbol) >> each selector ]) ] ].
+	^ col 
 ]
 
 { #category : 'initialization' }
