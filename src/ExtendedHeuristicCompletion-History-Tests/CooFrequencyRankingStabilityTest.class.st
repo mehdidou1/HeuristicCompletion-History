@@ -20,10 +20,10 @@ CooFrequencyRankingStabilityTest >> setUp [
 CooFrequencyRankingStabilityTest >> testClassRankingReflectsFrequency [
 
 	4 timesRepeat: [
-		handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #() ].
+		handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) ].
 	2 timesRepeat: [
-		handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Button'; yourself) addedTo: #() ].
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Panel'; yourself) addedTo: #().
+		handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Button'; yourself) ].
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Panel'; yourself).
 
 	self assert: handler classEntries first contents equals: 'Widget'.
 	self assert: handler classEntries second contents equals: 'Button'.

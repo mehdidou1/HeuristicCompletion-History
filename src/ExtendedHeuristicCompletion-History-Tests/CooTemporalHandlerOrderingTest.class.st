@@ -20,8 +20,8 @@ CooTemporalHandlerOrderingTest >> setUp [
 CooTemporalHandlerOrderingTest >> testClassesAreNewestFirst [
 	"The most recently added class should appear first in classEntries."
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Alpha'; yourself) addedTo: #().
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Beta'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Alpha'; yourself).
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Beta'; yourself).
 
 	self assert: handler classEntries first contents equals: 'Beta'.
 	self assert: handler classEntries second contents equals: 'Alpha'
@@ -31,9 +31,9 @@ CooTemporalHandlerOrderingTest >> testClassesAreNewestFirst [
 CooTemporalHandlerOrderingTest >> testInterleavedClassAndMethodOperations [
 	"Adding classes and methods interleaved should maintain independence."
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #draw; nameOfClass: 'Widget'; yourself) addedTo: #().
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Button'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Button'; yourself).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #click; nameOfClass: 'Button'; yourself) addedTo: #().
 
 	self assert: handler classEntries size equals: 2.

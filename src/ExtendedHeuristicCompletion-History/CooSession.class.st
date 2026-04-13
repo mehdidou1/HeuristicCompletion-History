@@ -163,7 +163,7 @@ CooSession >> addClassItem: anItem [
 	
 	"Instead of poking the handler during each addition we could pass it all the info when 
 	requesting a list of entries."
-	programEntityHandler handleNewClassItem: anItem addedTo: classDescriptions
+	programEntityHandler handleNewClassItem: anItem
 ]
 
 { #category : 'interaction items' }
@@ -423,9 +423,9 @@ CooSession >> shiftHandlerTo: aCooHandler [
 
 	programEntityHandler := aCooHandler.
 	methodDescriptions do: [ :item | 
-		programEntityHandler handleNewMethodItem: item addedTo: methodDescriptions ] .
+		programEntityHandler handleNewMethodItem: item] .
 	classDescriptions do: [ :item | 
-		programEntityHandler handleNewClassItem: item addedTo: classDescriptions ]
+		programEntityHandler handleNewClassItem: item ]
 ]
 
 { #category : 'accessing - handlers' }

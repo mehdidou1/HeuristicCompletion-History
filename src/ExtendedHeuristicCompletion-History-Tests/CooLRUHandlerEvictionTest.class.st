@@ -23,7 +23,7 @@ CooLRUHandlerEvictionTest >> testClassLRUAlsoHas1000Capacity [
 	1 to: 1001 do: [ :i |
 		handler handleNewClassItem: (CooAddedClassHistoryItem new
 			nameOfClass: 'Class', i asString;
-			yourself) addedTo: #() ].
+			yourself) ].
 
 	self assert: handler classEntries size equals: 1000
 ]
@@ -31,8 +31,8 @@ CooLRUHandlerEvictionTest >> testClassLRUAlsoHas1000Capacity [
 { #category : 'tests' }
 CooLRUHandlerEvictionTest >> testDuplicateClassNamesAreDeduplicated [
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 
 	self assert: handler classEntries size equals: 1
 ]
@@ -94,7 +94,7 @@ CooLRUHandlerEvictionTest >> testSelectorAndClassLRUAreIndependent [
 			nameOfClass: 'A';
 			yourself) addedTo: #() ].
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'OnlyClass'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'OnlyClass'; yourself).
 
 	self assert: handler selectorEntries size equals: 1000.
 	self assert: handler classEntries size equals: 1
@@ -103,7 +103,7 @@ CooLRUHandlerEvictionTest >> testSelectorAndClassLRUAreIndependent [
 { #category : 'tests' }
 CooLRUHandlerEvictionTest >> testSingleClassItem [
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 
 	self assert: handler classEntries size equals: 1.
 	self assert: handler classEntries first contents equals: 'Widget'

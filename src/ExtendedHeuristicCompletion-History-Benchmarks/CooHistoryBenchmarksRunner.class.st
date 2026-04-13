@@ -44,29 +44,27 @@ CooHistoryBenchmarksRunner class >> dryRunLoadingWithSession: aSession repositor
 
 { #category : 'running' }
 CooHistoryBenchmarksRunner class >> dryRunMicrodown [
+
 	<script>
-	
-	
-	
-	Smalltalk globals
-	at: #BaselineOfMicrodown 
-	ifPresent: [ :c | c removeFromSystem ].
+	Smalltalk globals at: #BaselineOfMicrodown ifPresent: [ :c | c removeFromSystem ].
 
 	Metacello new
 		baseline: 'Microdown';
 		repository: 'github://pillar-markup/Microdown:v2.9.3/src';
 		onConflict: [ :ex | ex useIncoming ];
 		onUpgrade: [ :ex | ex useIncoming ];
-		load: #('All').
-	
+		load: #( 'All' ).
+
 	CooSession resetProgramEntities.
 	CooSession current noUserSelectionHandling.
 	Transcript show: CooSession current reportString.
-	
-	(self dryRunLoadingWithSession: CooSession current repositoryString:  'git@github.com:pillar-markup/Microdown.git' numberOfAnalyzedCommits: 5).
-	
+
+	self
+		dryRunLoadingWithSession: CooSession current
+		repositoryString: 'git@github.com:pillar-markup/Microdown.git'
+		numberOfAnalyzedCommits: 15.
+
 	Transcript show: CooSession current reportString
-	
 ]
 
 { #category : 'running' }

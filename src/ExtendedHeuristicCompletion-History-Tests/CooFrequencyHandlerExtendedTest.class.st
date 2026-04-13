@@ -20,7 +20,7 @@ CooFrequencyHandlerExtendedTest >> setUp [
 CooFrequencyHandlerExtendedTest >> testClassAndSelectorFrequenciesAreIndependent [
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #Widget; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 
 	self assert: handler selectorEntries size equals: 1.
 	self assert: handler classEntries size equals: 1
@@ -51,8 +51,8 @@ CooFrequencyHandlerExtendedTest >> testFrequencyOrderingWithThreeSelectors [
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testModifiedClassIncrementsSameKey [
 
-	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
-	handler handleNewClassItem: (CooModifiedClassHistoryItem new nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
+	handler handleNewClassItem: (CooModifiedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 
 	self assert: handler classEntries size equals: 1.
 	self assert: handler classEntries first contents equals: 'Widget'
@@ -74,7 +74,7 @@ CooFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testRemoveNonExistentClassDoesNotCrash [
 
-	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'Ghost'; yourself) addedTo: #().
+	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'Ghost'; yourself).
 
 	self assert: handler classEntries isEmpty
 ]

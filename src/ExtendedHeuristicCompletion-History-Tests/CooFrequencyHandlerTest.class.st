@@ -27,10 +27,10 @@ CooFrequencyHandlerTest >> testAddingClassesSortsTheMostFrequent [
 		nameOfClass: 'AnotherTestClass';
 		yourself.
 		
-	handler handleNewClassItem: aDifferentOne addedTo: #().
+	handler handleNewClassItem: aDifferentOne.
 
-	handler handleNewClassItem: added1 addedTo: #().
-	handler handleNewClassItem: added1 addedTo: #().
+	handler handleNewClassItem: added1.
+	handler handleNewClassItem: added1.
 	
 	self assert: handler classEntries first contents equals: 'TestClass'.
 
@@ -38,7 +38,7 @@ CooFrequencyHandlerTest >> testAddingClassesSortsTheMostFrequent [
 	added1 := CooRemovedClassHistoryItem new
 		nameOfClass: 'TestClass';
 		yourself.
-	handler handleNewClassItem: added1 addedTo: #().
+	handler handleNewClassItem: added1.
 	
 	self assert: handler classEntries size equals: 1.
 	self assert: handler classEntries first contents equals: 'AnotherTestClass' 
@@ -55,15 +55,15 @@ CooFrequencyHandlerTest >> testAddingThreeTimesTheSame [
 		nameOfClass: 'TestClass';
 		yourself.
 
-	handler handleNewClassItem: added1 addedTo: #().
-	handler handleNewClassItem: addedTheSame1 addedTo: #().
+	handler handleNewClassItem: added1.
+	handler handleNewClassItem: addedTheSame1.
 
 	self assert: handler classEntries size equals: 1.
 
 	aDifferentOne := CooAddedClassHistoryItem new
 		nameOfClass: 'AnotherTestClass';
 		yourself.
-	handler handleNewClassItem: aDifferentOne addedTo: #().
+	handler handleNewClassItem: aDifferentOne.
 	
 	self assert: handler classEntries size equals: 2
 ]

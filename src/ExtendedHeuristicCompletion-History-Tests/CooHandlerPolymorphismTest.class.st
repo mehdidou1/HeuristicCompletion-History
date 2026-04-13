@@ -29,7 +29,7 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedClass [
 		| h item |
 		h := handlerClass new.
 		item := CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself.
-		h handleNewClassItem: item addedTo: #().
+		h handleNewClassItem: item.
 		self assert: h classEntries isNotEmpty description: handlerClass name, ' did not register added class' ]
 ]
 
@@ -76,8 +76,8 @@ CooHandlerPolymorphismTest >> testAllHandlersReturnNECEntries [
 	self allHandlerClasses do: [ :handlerClass |
 		| h |
 		h := handlerClass new.
-		h handleNewMethodItem: (self methodItem: #bar class: 'X' event: CooAddedMethodHistoryItem) addedTo: #().
-		h handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'X'; yourself) addedTo: #().
+		h handleNewMethodItem: (self methodItem: #bar class: 'X' event: CooAddedMethodHistoryItem).
+		h handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'X'; yourself).
 
 		h selectorEntries do: [ :entry |
 			self assert: (entry respondsTo: #contents) description: handlerClass name, ' selectorEntry does not respond to #contents' ].
@@ -105,7 +105,7 @@ CooHandlerPolymorphismTest >> testRemoveClassDoesNotCrashAnyHandler [
 		h := handlerClass new.
 		removed := CooRemovedClassHistoryItem new nameOfClass: 'Ghost'; yourself.
 
-		[ h handleNewClassItem: removed addedTo: #() ]
+		[ h handleNewClassItem: removed ]
 			on: Error
 			do: [ :e | self fail: handlerClass name, ' crashed on remove of non-existent class: ', e messageText ] ]
 ]
