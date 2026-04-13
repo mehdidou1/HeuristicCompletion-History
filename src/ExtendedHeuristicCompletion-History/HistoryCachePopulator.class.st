@@ -67,6 +67,13 @@ HistoryCachePopulator class >> toplo [
 	(self populateFromRepo:  'git@github.com:pharo-graphics/Toplo.git' commits: 500) inspect 
 ]
 
+{ #category : 'compute population' }
+HistoryCachePopulator >> classNameFromDefinition: aDefinition [
+
+	^ aDefinition className, (aDefinition classIsMeta ifTrue: [ ' class' ] ifFalse: [ '' ])
+	
+]
+
 { #category : 'forBenchmarks' }
 HistoryCachePopulator >> commitsForHead: aNumber [
 
@@ -232,44 +239,42 @@ HistoryCachePopulator >> processMethodAddition: anAddition into: aCollection tim
 	selector ifNil: [ ^ self ].
 
 	ast := self tryParseAST: anAddition leftContents.
-	deltaMessage := ast allChildren 
-		select: [ :each | each isMessage ] thenCollect: [ :each | each selector ].
-	
-	
-	item := (CooAddedMethodHistoryItem new
-		selector: selector;
-		nameOfClass: anAddition definition className;
-		ast: ast;
-		live: false;
-		timestamp: aTimestamp;
-		yourself).
+	deltaMessage := ast allChildren select: [ :each | each isMessage ] thenCollect: [ :each | each selector ].
+
+
+	item := CooAddedMethodHistoryItem new
+		        selector: selector;
+		        nameOfClass: (self classNameFromDefinition: anAddition definition);
+		        ast: ast;
+		        live: false;
+		        timestamp: aTimestamp;
+		        yourself.
 	deltaMessage ifNotEmpty: [ item deltaMessages: deltaMessage ].
 	aCollection add: item
-	
 ]
 
 { #category : 'compute population' }
 HistoryCachePopulator >> processMethodModification: aModification into: aCollection timestamp: aTimestamp [
 	"Process a method modification and add it to the collection."
 
-	| selector newAst oldAst deltaMessages item | 
+	| selector newAst oldAst deltaMessages item |
 	selector := self selectorFromNode: aModification.
 	selector ifNil: [ ^ self ].
 
 	newAst := self tryParseAST: aModification leftContents.
 	oldAst := self tryParseAST: aModification rightContents.
-	
-	( newAst isNotNil & oldAst isNotNil )
+
+	newAst isNotNil & oldAst isNotNil
 		ifTrue: [ deltaMessages := self computeDeltaMessageBetween: newAst andOld: oldAst ]
-		ifFalse: [  deltaMessages :=  #() ].
-	
-	item := (CooModifiedMethodHistoryItem new
-		selector: selector;
-		nameOfClass: aModification definition className;
-		ast: newAst;
-		live: false;
-		timestamp: aTimestamp;
-		yourself).
+		ifFalse: [ deltaMessages := #(  ) ].
+
+	item := CooModifiedMethodHistoryItem new
+		        selector: selector;
+		        nameOfClass: (self classNameFromDefinition: aModification definition);
+		        ast: newAst;
+		        live: false;
+		        timestamp: aTimestamp;
+		        yourself.
 	item deltaMessages: deltaMessages.
 	aCollection add: item
 ]
@@ -283,20 +288,18 @@ HistoryCachePopulator >> processMethodRemoval: aRemoval into: aCollection timest
 	selector ifNil: [ ^ self ].
 
 	ast := self tryParseAST: aRemoval rightContents.
-	deltaMessage := ast allChildren 
-		select: [ :each | each isMessage ] thenCollect: [ :each | each selector ].
-	
-	
-	item := (CooRemovedMethodHistoryItem new
-		selector: selector;
-		nameOfClass: aRemoval definition className;
-		ast: ast;
-		live: false;
-		timestamp: aTimestamp;
-		yourself).
+	deltaMessage := ast allChildren select: [ :each | each isMessage ] thenCollect: [ :each | each selector ].
+
+
+	item := CooRemovedMethodHistoryItem new
+		        selector: selector;
+		        nameOfClass: (self classNameFromDefinition: aRemoval definition);
+		        ast: ast;
+		        live: false;
+		        timestamp: aTimestamp;
+		        yourself.
 	deltaMessage ifNotEmpty: [ item deltaMessages: deltaMessage ].
 	aCollection add: item
-	
 ]
 
 { #category : 'accessing' }

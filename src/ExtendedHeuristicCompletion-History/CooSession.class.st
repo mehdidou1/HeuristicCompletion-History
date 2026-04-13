@@ -283,7 +283,7 @@ CooSession >> existingMethodDescriptions [
 { #category : 'for benchmark' }
 CooSession >> existingMethods [
 	"pay attention this requires that the classes are loaded in Pharo."
-
+	"we may have some extensions...."
 	| col |
 	col := OrderedCollection new. 
 	
@@ -296,8 +296,8 @@ CooSession >> existingMethods [
 			clss := each nameOfClass allButLast: 6 ].
 			self class environment at: clss asSymbol ifPresent: [ :myClass |
 				col add: (metaclass
-					ifTrue: [ (self class environment at: clss asSymbol) class >> each selector ]
-				   ifFalse: [ (self class environment at: clss asSymbol) >> each selector ]) ] ].
+					ifTrue: [ myClass class >> each selector ]
+				   ifFalse: [ myClass >> each selector ]) ] ].
 	^ col 
 ]
 

@@ -29,24 +29,26 @@ CooStaticBenchmarksMessageHistory >> run [
 	| cachedSelectors pos scannedMethods matchedCallsites |
 	cachedSelectors := self deltaMessageSelectors.
 	scannedMethods := 0.
-	matchedCallsites := 0.
-	
-	"we should look for the methods that are in the history and not in the package.
+	matchedCallsites := 0. "we should look for the methods that are in the history and not in the package.
 	Because the bench is simulating a dev behavior. We are only interested in added, modified methods. "
 
-	Transcript cr; show: '# Running Message Benchmark'.
-	
+	Transcript
+		cr;
+		show: '# Running Message Benchmark'; cr.
+
 	self session existingMethods do: [ :method |
 			scannedMethods := scannedMethods + 1.
 			method parseTree ifNotNil: [ :parseTree |
 					parseTree nodesDo: [ :node |
 							(node isMessage and: [ cachedSelectors includes: node selector ]) ifTrue: [
-									Transcript cr; show: '## Benched messages: '; show: node selector; space.
+									Transcript
+										cr;
+										show: '## Benched messages: ';
+										show: node selector;
+										space.
 									matchedCallsites := matchedCallsites + 1.
 									pos := node selectorInterval ifNil: [ node start ] ifNotNil: [ :interval | interval first ].
-									self benchCallsite: node atPosition: pos ] ] ] ].
-
-
+									self benchCallsite: node atPosition: pos ] ] ] ]
 ]
 
 { #category : 'benchmarks' }
