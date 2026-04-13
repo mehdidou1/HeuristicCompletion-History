@@ -31,9 +31,21 @@ CooLRUHandler >> classEntries [
 ]
 
 { #category : 'matching' }
+CooLRUHandler >> handleNewClassItem: anItem [
+
+	classLRU at: anItem nameOfClass put: anItem
+]
+
+{ #category : 'matching' }
 CooLRUHandler >> handleNewClassItem: anItem addedTo: aCollection [
 
 	classLRU at: anItem nameOfClass put: anItem
+]
+
+{ #category : 'matching' }
+CooLRUHandler >> handleNewMethodItem: anItem [
+
+	selectorLRU at: anItem selector put: anItem
 ]
 
 { #category : 'matching' }

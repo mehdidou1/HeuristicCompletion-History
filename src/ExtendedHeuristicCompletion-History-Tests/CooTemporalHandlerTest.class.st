@@ -27,15 +27,15 @@ CooTemporalHandlerTest >> testHandleNewClassItemRemovalClearsMatchingEntries [
 		nameOfClass: 'TestClass';
 		yourself.
 
-	handler handleNewClassItem: added addedTo: #().
-	handler handleNewClassItem: newer addedTo: #().
+	handler handleNewClassItem: added.
+	handler handleNewClassItem: newer.
 
 	self assert: handler classEntries size equals: 2.
 
 	removed := CooRemovedClassHistoryItem new
 		nameOfClass: 'TestClass';
 		yourself.
-	handler handleNewClassItem: removed addedTo: #().
+	handler handleNewClassItem: removed.
 
 	self assert: handler classEntries isEmpty
 ]
@@ -51,15 +51,15 @@ CooTemporalHandlerTest >> testHandleNewClassItemRemovalKeepsOtherClasses [
 		nameOfClass: 'ClassTwo';
 		yourself.
 
-	handler handleNewClassItem: classOne addedTo: #().
-	handler handleNewClassItem: classTwo addedTo: #().
+	handler handleNewClassItem: classOne.
+	handler handleNewClassItem: classTwo.
 
 	self assert: handler classEntries size equals: 2.
 
 	removed := CooRemovedClassHistoryItem new
 		nameOfClass: 'ClassOne';
 		yourself.
-	handler handleNewClassItem: removed addedTo: #().
+	handler handleNewClassItem: removed.
 
 	self assert: handler classEntries size equals: 1
 ]
@@ -77,8 +77,8 @@ CooTemporalHandlerTest >> testHandleNewMethodItemRemovalClearsMatchingEntries [
 		nameOfClass: 'TestClass';
 		yourself.
 
-	handler handleNewMethodItem: added addedTo: #().
-	handler handleNewMethodItem: modified addedTo: #().
+	handler handleNewMethodItem: added.
+	handler handleNewMethodItem: modified.
 
 	self assert: handler selectorEntries size equals: 2.
 
@@ -92,6 +92,60 @@ CooTemporalHandlerTest >> testHandleNewMethodItemRemovalClearsMatchingEntries [
 ]
 
 { #category : 'running' }
+CooTemporalHandlerTest >> testRemovingAClassAlsoRemovesMethods [
+
+	| items |
+	
+	items := 
+	{ 
+	CooAddedMethodHistoryItem new
+		selector: #sampleSelector;
+		nameOfClass: 'TestClass';
+		yourself
+	}.
+	items do: [ :each |  
+		handler handleNewMethodItem: each ].
+	self assert: handler selectorEntries size equals: 1. 
+	
+	handler handleNewClassItem: (CooRemovedClassHistoryItem new
+		nameOfClass: 'TestClass';
+		yourself).
+	
+	self assert: handler classEntries isEmpty.
+	self assert: handler selectorEntries isEmpty
+]
+
+{ #category : 'running' }
+CooTemporalHandlerTest >> testRemovingAClassAlsoRemovesMethods2 [
+
+	| items |
+	
+	items := 
+	{ 
+	CooAddedMethodHistoryItem new
+		selector: #sampleSelector;
+		nameOfClass: 'TestClass';
+		yourself.
+		
+	CooAddedMethodHistoryItem new
+		selector: #sampleSelector2;
+		nameOfClass: 'TestClass';
+		yourself
+	}.
+	items do: [ :each |  
+		handler handleNewMethodItem: each ].
+	
+	self assert: handler selectorEntries size equals: 2. 
+	
+	handler handleNewClassItem: (CooRemovedClassHistoryItem new
+		nameOfClass: 'TestClass';
+		yourself).
+	
+	self assert: handler classEntries isEmpty.
+	self assert: handler selectorEntries isEmpty
+]
+
+{ #category : 'running' }
 CooTemporalHandlerTest >> testSelectorEntriesExcludeRemovedMethods [
 
 	| added removed selectorEntries |
@@ -99,13 +153,13 @@ CooTemporalHandlerTest >> testSelectorEntriesExcludeRemovedMethods [
 		selector: #sampleSelector;
 		nameOfClass: 'TestClass';
 		yourself.
-	handler handleNewMethodItem: added addedTo: #().
+	handler handleNewMethodItem: added.
 
 	removed := CooRemovedMethodHistoryItem new
 		selector: #sampleSelector;
 		nameOfClass: 'TestClass';
 		yourself.
-	handler handleNewMethodItem: removed addedTo: #().
+	handler handleNewMethodItem: removed.
 
 	selectorEntries := handler selectorEntries.
 

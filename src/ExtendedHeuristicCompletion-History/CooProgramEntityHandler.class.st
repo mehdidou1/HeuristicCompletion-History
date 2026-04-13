@@ -16,7 +16,19 @@ CooProgramEntityHandler >> classEntries [
 ]
 
 { #category : 'matching' }
+CooProgramEntityHandler >> handleNewClassItem: anItem [
+
+	self subclassResponsibility
+]
+
+{ #category : 'matching' }
 CooProgramEntityHandler >> handleNewClassItem: anItem addedTo: aCollection [
+
+	self subclassResponsibility
+]
+
+{ #category : 'matching' }
+CooProgramEntityHandler >> handleNewMethodItem: anItem [
 
 	self subclassResponsibility
 ]

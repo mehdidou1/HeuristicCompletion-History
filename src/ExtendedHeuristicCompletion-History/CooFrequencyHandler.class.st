@@ -28,6 +28,30 @@ CooFrequencyHandler >> classEntries [
 ]
 
 { #category : 'matching' }
+CooFrequencyHandler >> handleNewClassItem: anItem [
+
+	| key |
+	key := anItem nameOfClass.
+	
+	"to be changed"
+	(#(#added #modified) includes: anItem event) 
+		ifTrue: [ 
+			classFrequencyDictionary 
+				at: key
+				ifPresent: [:v  | classFrequencyDictionary at: key put: v + 1 ]
+				ifAbsentPut: [ 1 ] ].
+	
+ 	(anItem event = #removed)
+		ifTrue: [ 
+			"The problem could be removing two methods with the same name so the ifAbsent is important"
+			classFrequencyDictionary removeKey: key ifAbsent: [  ]
+		
+		  ]
+	 
+
+]
+
+{ #category : 'matching' }
 CooFrequencyHandler >> handleNewClassItem: anItem addedTo: aCollection [
 
 	| key |
@@ -49,6 +73,29 @@ CooFrequencyHandler >> handleNewClassItem: anItem addedTo: aCollection [
 		  ]
 	 
 
+]
+
+{ #category : 'matching' }
+CooFrequencyHandler >> handleNewMethodItem: anItem [
+	"here we will have to manage the incremental management of the new event see comments in selectorentries."
+	
+	| key |
+	key :=  anItem selector.
+	
+	"to be changed"
+	(#(#added #modified) includes: anItem event) 
+		ifTrue: [ 
+			selectorFrequenceDictionary 
+				at: key
+				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1 ]
+				ifAbsentPut: [ 1 ] ].
+	
+ 	(anItem event = #removed)
+		ifTrue: [ 
+			"The problem could be removing two methods with the same name so the ifAbsent is important"
+			selectorFrequenceDictionary removeKey: key ifAbsent: [  ]
+		
+		  ]
 ]
 
 { #category : 'matching' }
