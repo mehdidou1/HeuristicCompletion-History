@@ -67,8 +67,8 @@ CooTemporalHandler >> handleNewMethodItem: anItem addedTo: aCollection [
 	(anItem event = #removed)
 		ifTrue: [ 
 			"when a method is removed we remove all the method addition and modification of that method"
-			methodDescriptions := methodDescriptions copy reject: [ :each | 
-				each ~~ anItem and: [ each nameOfClass = anItem nameOfClass and: [ each selector = anItem selector ] ] ] ]
+			methodDescriptions := methodDescriptions reject: [ :each | 
+			 each nameOfClass = anItem nameOfClass and: [ each selector = anItem selector ] ] ]
 		ifFalse: [  methodDescriptions addFirst: anItem ]
 	
 ]
@@ -119,13 +119,8 @@ CooTemporalHandler >> registerSelector: aSelector ast: anAst event: anEventSymbo
 { #category : 'accessing' }
 CooTemporalHandler >> selectorEntries [
 
-	^ (methodDescriptions reject: [ :each | each event = #removed ]) collect: [ :each |
+	^ methodDescriptions collect: [ :each |
 			  (CoSessionSelectorEntry contents: each selector node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Temporal' ]
-]
-
-{ #category : 'accessing' }
-CooTemporalHandler >> size [ 
-	^ methodDescriptions size
 ]

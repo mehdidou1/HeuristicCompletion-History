@@ -51,7 +51,18 @@ CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems [
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
 
 	self assert: handler methodSize equals: 2.
-	self assert: handler size equals: 2
+	
+]
+
+{ #category : 'tests' }
+CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems2 [
+
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+
+	self assert: handler methodSize equals: 0.
+
 ]
 
 { #category : 'tests' }
@@ -89,12 +100,10 @@ CooTemporalHandlerOrderingTest >> testRemovalDeletesAllMatchingByClassAndSelecto
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-
+	
 	self assert: handler selectorEntries size equals: 3.
-
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-
-	"All 3 entries for A>>foo should be gone. The removed item itself is kept in methodDescriptions but filtered from selectorEntries."
+	
 	self assert: handler selectorEntries isEmpty
 ]
 

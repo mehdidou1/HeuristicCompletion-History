@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'handler'
 	],
-	#category : 'ExtendedHeuristicCompletion-History-Tests-Gitscrapper',
+	#category : 'ExtendedHeuristicCompletion-History-Tests-Handlers',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
-	#tag : 'Gitscrapper'
+	#tag : 'Handlers'
 }
 
 { #category : 'running' }
