@@ -1,9 +1,9 @@
 Class {
 	#name : 'CooSessionLifecycleTest',
 	#superclass : 'CooSessionTest',
-	#category : 'ExtendedHeuristicCompletion-History-Tests-Handlers',
+	#category : 'ExtendedHeuristicCompletion-History-Tests-Session',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
-	#tag : 'Handlers'
+	#tag : 'Session'
 }
 
 { #category : 'running' }
@@ -16,14 +16,15 @@ CooSessionLifecycleTest >> setUp [
 { #category : 'tests' }
 CooSessionLifecycleTest >> testAddAndRemoveClassClearsEntries [
 
+
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'MyWidget'; yourself).
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'MyWidget'; yourself).
 
-	self assert: self programEntityHandler classEntries size equals: 2.
+	self assert: session programEntityHandler classEntries size equals: 2.
 
 	session addClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'MyWidget'; yourself).
 
-	self assert: self programEntityHandler classEntries size equals: 0
+	self assert: session programEntityHandler classEntries size equals: 0
 ]
 
 { #category : 'tests' }

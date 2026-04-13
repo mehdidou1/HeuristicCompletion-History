@@ -7,6 +7,13 @@ Class {
 }
 
 { #category : 'running' }
+CooSessionTemporalTest >> addedMethodAnnouncement [
+
+	^ MethodAdded 
+		method: CooSessionTemporalTest >> #ourModifiedPrintString
+]
+
+{ #category : 'running' }
 CooSessionTemporalTest >> modifiedMethodAnnouncement [
 
 	^ MethodModified
@@ -40,8 +47,9 @@ CooSessionTemporalTest >> ourOriginalPrintString [
 CooSessionTemporalTest >> removedMethodAnnouncement [
 
 	^ MethodRemoved new
-		  methodOrigin: CooSessionTemporalTest;
-		  method: CooSessionTemporalTest >> #ourModifiedPrintString
+		methodOrigin: CooSessionTemporalTest;
+		method: CooSessionTemporalTest >> #ourModifiedPrintString;
+		yourself
 ]
 
 { #category : 'running' }
@@ -51,7 +59,7 @@ CooSessionTemporalTest >> setUp [
 	session := CooSession new programEntityHandler: CooTemporalHandler new
 ]
 
-{ #category : 'tests - compute' }
+{ #category : 'tests - session raw internal collections' }
 CooSessionTemporalTest >> testAddClassAddsEntry [
 
 	| announcement |
@@ -64,7 +72,7 @@ CooSessionTemporalTest >> testAddClassAddsEntry [
 	self assert: session classEntries size equals: 1
 ]
 
-{ #category : 'tests - announcements' }
+{ #category : 'tests - announcements asking handler' }
 CooSessionTemporalTest >> testAnnouncementAddModifiedMethodComputesMessageDiff [
 
 	| announcement |
@@ -76,11 +84,14 @@ CooSessionTemporalTest >> testAnnouncementAddModifiedMethodComputesMessageDiff [
 		equals: #( #testComputeMessages )
 ]
 
-{ #category : 'tests - announcements' }
+{ #category : 'tests - announcements asking handler' }
 CooSessionTemporalTest >> testAnnouncementAddModifiedMethodRegistersEntry [
 
 	| announcement |
-	announcement := MethodModified methodChangedFrom: Point >> #degrees to: (Point >> #degrees) copy oldProtocol: 'toto'.
+	announcement := MethodModified 
+		methodChangedFrom: Point >> #degrees 
+		to: (Point >> #degrees) copy 
+		oldProtocol: 'toto'.
 
 	session addModifiedMethodInVocabulary: announcement.
 	self 
@@ -88,7 +99,7 @@ CooSessionTemporalTest >> testAnnouncementAddModifiedMethodRegistersEntry [
 		equals: 1
 ]
 
-{ #category : 'tests - announcements' }
+{ #category : 'tests - announcements asking handler' }
 CooSessionTemporalTest >> testAnnouncementAddNewMethodRegistersEntry [
 
 	| announcement |
@@ -102,7 +113,7 @@ CooSessionTemporalTest >> testAnnouncementAddNewMethodRegistersEntry [
 		equals: 1
 ]
 
-{ #category : 'tests - announcements' }
+{ #category : 'tests - announcements asking handler' }
 CooSessionTemporalTest >> testAnnouncementAddNewVariableAnnouncementRegistersEntry [
 
 	| announcement entry |
@@ -118,8 +129,9 @@ CooSessionTemporalTest >> testAnnouncementAddNewVariableAnnouncementRegistersEnt
 		equals: 1
 ]
 
-{ #category : 'tests - announcements' }
+{ #category : 'tests - announcements asking handler' }
 CooSessionTemporalTest >> testAnnouncementAddedAndRemovedTheSameMethod [
+
 	| announcement |
 	announcement := self removedMethodAnnouncement.
 	session removeMethodFromVocabulary: announcement.
@@ -131,6 +143,19 @@ CooSessionTemporalTest >> testAnnouncementAddedAndRemovedTheSameMethod [
 	self 
 		assert: session programEntityHandler methodDescriptions first deltaMessages asArray
 		equals: #( #testComputeMessages )
+]
+
+{ #category : 'tests - announcements asking handler' }
+CooSessionTemporalTest >> testAnnouncementRemovedAndAddedTheSameMethod [
+	| announcement |
+	announcement := self addedMethodAnnouncement.
+	session addNewMethodInVocabulary: announcement.
+	
+	announcement := self removedMethodAnnouncement.
+	session removeMethodFromVocabulary: announcement.
+	
+	self 
+		assert: session programEntityHandler methodDescriptions isEmpty.
 ]
 
 { #category : 'tests - changing handler' }
@@ -200,22 +225,25 @@ CooSessionTemporalTest >> testComputeMessages [
 { #category : 'tests - compute' }
 CooSessionTemporalTest >> testComputeMessagesOfSimilarMethods [
 
-	| announcement |
-	announcement := MethodModified methodChangedFrom: self class >> #ourOriginalPrintString to: (self class >> #ourOriginalPrintString) oldProtocol: 'toto'.
+	| item |
+	item := MethodModified 
+		methodChangedFrom: self class >> #ourOriginalPrintString 
+		to: (self class >> #ourOriginalPrintString) 
+		oldProtocol: 'toto'.
 
-	self assert: (session computeDeltaMessageOf: announcement) isEmpty
+	self assert: (session computeDeltaMessageOf: item) isEmpty
 ]
 
-{ #category : 'tests - compute' }
+{ #category : 'tests - items asking handler' }
 CooSessionTemporalTest >> testHandlerChanges [
 
-	| anns |
-	anns := { 
+	| items |
+	items := { 
 		MethodModified methodChangedFrom: Point >> #degrees to: (Point >> #degrees) copy oldProtocol: 'toto'.
 		MethodModified methodChangedFrom: Point >> #degrees to: (Point >> #degrees) copy oldProtocol: 'toto'.
 		}.
 	
-	anns do: [ :each | 
+	items do: [ :each | 
 		session addModifiedMethodInVocabulary: each ].
 	
 	self 
@@ -302,11 +330,11 @@ CooSessionTemporalTest >> testSessionNewCreatesAndEmptySession [
 	self assert: session classDescriptions size equals: 0
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - session raw internal collections' }
 CooSessionTemporalTest >> testShiftHandlerTo [
 
-	| anns |
-	anns := { 
+	| items |
+	items := { 
 		CooModifiedMethodHistoryItem new
 		        selector: #degrees;
 		        live: true;
@@ -332,7 +360,7 @@ CooSessionTemporalTest >> testShiftHandlerTo [
 		        nameOfClass: 'Point';
 		        yourself}.
 	
-	anns do: [ :each | 
+	items do: [ :each | 
 		session addMethodItem: each ].
 	
 	self assert: session selectorEntries size equals: 4.

@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'handler'
 	],
-	#category : 'ExtendedHeuristicCompletion-History-Tests-Handlers',
+	#category : 'ExtendedHeuristicCompletion-History-Tests-Interaction',
 	#package : 'ExtendedHeuristicCompletion-History-Tests',
-	#tag : 'Handlers'
+	#tag : 'Interaction'
 }
 
 { #category : 'running' }
