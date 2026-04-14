@@ -32,9 +32,9 @@ CooTemporalHandlerOrderingTest >> testInterleavedClassAndMethodOperations [
 	"Adding classes and methods interleaved should maintain independence."
 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #draw; nameOfClass: 'Widget'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #draw; nameOfClass: 'Widget'; yourself).
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Button'; yourself).
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #click; nameOfClass: 'Button'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #click; nameOfClass: 'Button'; yourself).
 
 	self assert: handler classEntries size equals: 2.
 	self assert: handler selectorEntries size equals: 2.
@@ -47,8 +47,8 @@ CooTemporalHandlerOrderingTest >> testInterleavedClassAndMethodOperations [
 { #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems [
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	self assert: handler methodSize equals: 2.
 	
@@ -57,9 +57,9 @@ CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems [
 { #category : 'tests' }
 CooTemporalHandlerOrderingTest >> testMethodSizeTracksAllItems2 [
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	self assert: handler methodSize equals: 0.
 
@@ -73,8 +73,8 @@ CooTemporalHandlerOrderingTest >> testMethodsAreNewestFirst [
 	first := CooAddedMethodHistoryItem new selector: #alpha; nameOfClass: 'TestClass'; yourself.
 	second := CooAddedMethodHistoryItem new selector: #beta; nameOfClass: 'TestClass'; yourself.
 
-	handler handleNewMethodItem: first addedTo: #().
-	handler handleNewMethodItem: second addedTo: #().
+	handler handleNewMethodItem: first.
+	handler handleNewMethodItem: second.
 
 	"beta was added last, so it should be first"
 	self assert: handler selectorEntries first selector equals: #beta.
@@ -85,8 +85,8 @@ CooTemporalHandlerOrderingTest >> testMethodsAreNewestFirst [
 CooTemporalHandlerOrderingTest >> testModifiedMethodKeepsTemporalOrder [
 	"Modifying a method that was previously added should place the modification first."
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	"Both should be present (temporal keeps all), modified first"
 	self assert: handler selectorEntries size equals: 2.
@@ -97,12 +97,12 @@ CooTemporalHandlerOrderingTest >> testModifiedMethodKeepsTemporalOrder [
 CooTemporalHandlerOrderingTest >> testRemovalDeletesAllMatchingByClassAndSelector [
 	"Removing a method should delete ALL history entries with that class+selector combo."
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	
 	self assert: handler selectorEntries size equals: 3.
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	
 	self assert: handler selectorEntries isEmpty
 ]
@@ -111,10 +111,10 @@ CooTemporalHandlerOrderingTest >> testRemovalDeletesAllMatchingByClassAndSelecto
 CooTemporalHandlerOrderingTest >> testRemovalOnlyAffectsMatchingClassAndSelector [
 	"#foo in ClassA is different from #foo in ClassB. Removing A>>foo should not touch B>>foo."
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'B'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'B'; yourself).
 
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	self assert: handler selectorEntries size equals: 1
 ]

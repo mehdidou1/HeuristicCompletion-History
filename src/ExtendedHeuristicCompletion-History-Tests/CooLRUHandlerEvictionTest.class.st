@@ -41,8 +41,8 @@ CooLRUHandlerEvictionTest >> testDuplicateClassNamesAreDeduplicated [
 CooLRUHandlerEvictionTest >> testDuplicateSelectorsAreDeduplicated [
 	"Adding the same selector twice should result in 1 entry (LRU stores by key)."
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	self assert: handler selectorEntries size equals: 1
 ]
@@ -55,7 +55,7 @@ CooLRUHandlerEvictionTest >> testEvictsOldestWhenCapacityExceeded [
 		handler handleNewMethodItem: (CooAddedMethodHistoryItem new
 			selector: ('method', i asString) asSymbol;
 			nameOfClass: 'A';
-			yourself) addedTo: #() ].
+			yourself)].
 
 	self assert: handler selectorEntries size equals: 1000.
 
@@ -63,7 +63,7 @@ CooLRUHandlerEvictionTest >> testEvictsOldestWhenCapacityExceeded [
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new
 		selector: #brandNewMethod;
 		nameOfClass: 'A';
-		yourself) addedTo: #().
+		yourself).
 
 	self assert: handler selectorEntries size equals: 1000.
 	self assert: ((handler selectorEntries collect: [ :e | e selector ]) includes: #brandNewMethod)
@@ -77,8 +77,8 @@ CooLRUHandlerEvictionTest >> testReAccessingUpdatesLRUEntry [
 	originalItem := CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself.
 	updatedItem := CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself.
 
-	handler handleNewMethodItem: originalItem addedTo: #().
-	handler handleNewMethodItem: updatedItem addedTo: #().
+	handler handleNewMethodItem: originalItem.
+	handler handleNewMethodItem: updatedItem.
 
 	"Should still be 1 entry but with the updated item"
 	self assert: handler selectorEntries size equals: 1
@@ -92,7 +92,7 @@ CooLRUHandlerEvictionTest >> testSelectorAndClassLRUAreIndependent [
 		handler handleNewMethodItem: (CooAddedMethodHistoryItem new
 			selector: ('m', i asString) asSymbol;
 			nameOfClass: 'A';
-			yourself) addedTo: #() ].
+			yourself)].
 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'OnlyClass'; yourself).
 
@@ -112,7 +112,7 @@ CooLRUHandlerEvictionTest >> testSingleClassItem [
 { #category : 'tests' }
 CooLRUHandlerEvictionTest >> testSingleMethodItem [ 
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
 	self assert: handler selectorEntries size equals: 1.
 	self assert: handler selectorEntries first selector equals: #foo

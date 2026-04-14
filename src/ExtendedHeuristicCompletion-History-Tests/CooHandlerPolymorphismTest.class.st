@@ -41,7 +41,7 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptAddedMethod [
 		| h item |
 		h := handlerClass new.
 		item := self methodItem: #testMethod class: 'TestClass' event: CooAddedMethodHistoryItem.
-		h handleNewMethodItem: item addedTo: #().
+		h handleNewMethodItem: item.
 		self assert: h selectorEntries isNotEmpty description: handlerClass name, ' did not register added method' ]
 ]
 
@@ -52,8 +52,8 @@ CooHandlerPolymorphismTest >> testAllHandlersAcceptModifiedMethod [
 	self allHandlerClasses do: [ :handlerClass |
 		| h |
 		h := handlerClass new.
-		h handleNewMethodItem: (self methodItem: #foo class: 'A' event: CooAddedMethodHistoryItem) addedTo: #().
-		h handleNewMethodItem: (self methodItem: #foo class: 'A' event: CooModifiedMethodHistoryItem) addedTo: #().
+		h handleNewMethodItem: (self methodItem: #foo class: 'A' event: CooAddedMethodHistoryItem).
+		h handleNewMethodItem: (self methodItem: #foo class: 'A' event: CooModifiedMethodHistoryItem).
 		self assert: h selectorEntries isNotEmpty description: handlerClass name, ' lost entries after modification' ]
 ]
 
@@ -92,7 +92,7 @@ CooHandlerPolymorphismTest >> testAllHandlersSelectorEntriesRespondToSelector [
 	self allHandlerClasses do: [ :handlerClass |
 		| h |
 		h := handlerClass new.
-		h handleNewMethodItem: (self methodItem: #doIt class: 'Z' event: CooAddedMethodHistoryItem) addedTo: #().
+		h handleNewMethodItem: (self methodItem: #doIt class: 'Z' event: CooAddedMethodHistoryItem).
 		h selectorEntries do: [ :entry |
 			self assert: (entry respondsTo: #selector) description: handlerClass name, ' entry does not respond to #selector' ] ]
 ]
@@ -120,7 +120,7 @@ CooHandlerPolymorphismTest >> testRemoveThenQueryDoesNotCrashAnyHandler [
 		removed := self methodItem: #ghost class: 'NoClass' event: CooRemovedMethodHistoryItem.
 
 		"Should not raise an error"
-		[ h handleNewMethodItem: removed addedTo: #() ]
+		[ h handleNewMethodItem: removed]
 			on: Error
 			do: [ :e | self fail: handlerClass name, ' crashed on remove of non-existent method: ', e messageText ] ]
 ]

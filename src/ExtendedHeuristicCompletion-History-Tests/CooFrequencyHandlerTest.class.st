@@ -85,9 +85,9 @@ CooFrequencyHandlerTest >> testNewAddModifiedMethodUpdateTheSameEntry [
 		nameOfClass: 'TestClass';
 		yourself.
 
-	handler handleNewMethodItem: later addedTo: #().
-	handler handleNewMethodItem: added addedTo: #().
-	handler handleNewMethodItem: modified addedTo: #().
+	handler handleNewMethodItem: later.
+	handler handleNewMethodItem: added.
+	handler handleNewMethodItem: modified.
 
 	self assert: handler selectorEntries size equals: 2.
 	"SampleSelector got 2 and rankedLaterSelector 1 so sampleSelector is first."
@@ -110,9 +110,9 @@ CooFrequencyHandlerTest >> testSelectorEntriesExcludeRemovedMethods [
 		yourself.
 		
 		
-	handler handleNewMethodItem: willBeRankedFirstSelector addedTo: #().	
-	handler handleNewMethodItem: added addedTo: #().
-	handler handleNewMethodItem: added addedTo: #().
+	handler handleNewMethodItem: willBeRankedFirstSelector.	
+	handler handleNewMethodItem: added.
+	handler handleNewMethodItem: added.
 	
 	self assert: handler selectorEntries size equals: 2.
 	"SampleSelector got 2 and willBeRankedFirstSelector 1 so sampleSelector is first."
@@ -129,7 +129,7 @@ CooFrequencyHandlerTest >> testSelectorEntriesExcludeRemovedMethods [
 	We could zero the entry or decrease it from one. Now structurally if we remove the method, we should not get it proposed
 	because it can be really the only one."
 		
-	handler handleNewMethodItem: removed addedTo: #().
+	handler handleNewMethodItem: removed.
 	"SampleSelector got 2 and willBeRankedFirstSelector 1 so sampleSelector is first."
 	
 	self assert: handler selectorEntries size equals: 1.

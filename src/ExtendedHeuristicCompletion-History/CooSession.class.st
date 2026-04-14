@@ -192,7 +192,7 @@ CooSession >> addMethodItem: anItem [
 	"Instead of poking the handler during each addition we could pass it all the info when 
 	requesting a list of entries."
 	
-	programEntityHandler handleNewMethodItem: anItem addedTo: methodDescriptions
+	programEntityHandler handleNewMethodItem: anItem
 ]
 
 { #category : 'method handling' }

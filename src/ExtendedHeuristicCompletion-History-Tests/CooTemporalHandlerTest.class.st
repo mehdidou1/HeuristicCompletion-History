@@ -86,7 +86,7 @@ CooTemporalHandlerTest >> testHandleNewMethodItemRemovalClearsMatchingEntries [
 		selector: #sampleSelector;
 		nameOfClass: 'TestClass';
 		yourself.
-	handler handleNewMethodItem: removed addedTo: #().
+	handler handleNewMethodItem: removed .
 
 	self assert: handler selectorEntries isEmpty
 ]

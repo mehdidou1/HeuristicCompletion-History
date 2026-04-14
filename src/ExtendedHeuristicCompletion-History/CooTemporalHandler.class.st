@@ -22,7 +22,7 @@ Class {
 
 { #category : 'adding' }
 CooTemporalHandler >> addMethodItem: aCooAddedMethodHistoryItem [ 
-	self handleNewMethodItem: aCooAddedMethodHistoryItem addedTo: methodDescriptions
+	self handleNewMethodItem: aCooAddedMethodHistoryItem
 ]
 
 { #category : 'accessing' }

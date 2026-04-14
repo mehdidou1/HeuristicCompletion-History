@@ -19,7 +19,7 @@ CooFrequencyHandlerExtendedTest >> setUp [
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testClassAndSelectorFrequenciesAreIndependent [
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #Widget; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #Widget; nameOfClass: 'A'; yourself).
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 
 	self assert: handler selectorEntries size equals: 1.
@@ -35,14 +35,14 @@ CooFrequencyHandlerExtendedTest >> testEmptyHandlerReturnsEmptyEntries [
 
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testFrequencyOrderingWithThreeSelectors [
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #alpha; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #alpha; nameOfClass: 'A'; yourself).
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #beta; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #beta; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #beta; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #beta; nameOfClass: 'A'; yourself).
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #gamma; nameOfClass: 'A'; yourself).
 	self assert: handler selectorEntries first selector equals: #gamma.
 	self assert: handler selectorEntries second selector equals: #beta.
 	self assert: handler selectorEntries third selector equals: #alpha
@@ -65,8 +65,8 @@ CooFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
 	added := CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself.
 	modified := CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself.
 
-	handler handleNewMethodItem: added addedTo: #().
-	handler handleNewMethodItem: modified addedTo: #().
+	handler handleNewMethodItem: added.
+	handler handleNewMethodItem: modified.
 	self assert: handler selectorEntries size equals: 1.
 	self assert: handler selectorEntries first selector equals: #foo
 ]
@@ -82,7 +82,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveNonExistentClassDoesNotCrash [
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testRemoveNonExistentSelectorDoesNotCrash [
 
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #ghost; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #ghost; nameOfClass: 'A'; yourself).
 
 	self assert: handler selectorEntries isEmpty
 ]
@@ -90,12 +90,12 @@ CooFrequencyHandlerExtendedTest >> testRemoveNonExistentSelectorDoesNotCrash [
 { #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testRemoveThenReAddStartsFresh [
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	self assert: handler selectorEntries isEmpty.
 
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself) addedTo: #().
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	self assert: handler selectorEntries size equals: 1
 ]
