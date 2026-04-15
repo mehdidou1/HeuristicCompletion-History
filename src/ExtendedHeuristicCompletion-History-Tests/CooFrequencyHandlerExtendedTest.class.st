@@ -72,6 +72,29 @@ CooFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
 ]
 
 { #category : 'tests' }
+CooFrequencyHandlerExtendedTest >> testModifiyingNonExistingClassDoesNotCrash [
+
+	handler handleNewClassItem: (CooModifiedClassHistoryItem new nameOfClass: 'Widget'; yourself).
+	self assert: handler classEntries size equals: 1
+]
+
+{ #category : 'tests' }
+CooFrequencyHandlerExtendedTest >> testModifiyingNonExistingMethodDoesNotCrash [
+
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'Widget'; yourself).
+	self assert: handler selectorEntries size equals: 1
+]
+
+{ #category : 'tests' }
+CooFrequencyHandlerExtendedTest >> testRemoveClass [
+	
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget').
+	self assert: handler classEntries first contents equals: 'Widget'.
+	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'Widget'). 
+	self assert: handler classEntries isEmpty
+]
+
+{ #category : 'tests' }
 CooFrequencyHandlerExtendedTest >> testRemoveClassRemovesMethods [
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'Widget'; yourself).
@@ -80,6 +103,15 @@ CooFrequencyHandlerExtendedTest >> testRemoveClassRemovesMethods [
 	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'Widget').
 	self assert: handler classEntries isEmpty .
 	self assert: handler selectorEntries isEmpty 
+]
+
+{ #category : 'tests' }
+CooFrequencyHandlerExtendedTest >> testRemoveMethod [
+	
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'Widget'; yourself).
+	self assert: handler selectorEntries first contents equals: #foo.
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'Widget'; yourself).
+	self assert: handler selectorEntries isEmpty
 ]
 
 { #category : 'tests' }
