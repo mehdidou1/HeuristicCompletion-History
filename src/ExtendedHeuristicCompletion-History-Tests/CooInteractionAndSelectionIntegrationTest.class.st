@@ -51,7 +51,7 @@ CooInteractionAndSelectionIntegrationTest >> testDualHandlerAccumulatesAcrossMan
 		| entry item |
 		entry := self fakeEntryWithContents: 'method', i asString.
 		item := self fakeInteractionItemWithToken: 'me' selectedIndex: 1 choices: { entry }.
-		dualHandler handleNewSelectionItem: item addedTo: #() ].
+		dualHandler handleNewSelectionItem: item].
 
 	self assert: dualHandler sortedUserLowercasedEntries size equals: 5.
 	self assert: dualHandler sortedUserUppercasedEntries isEmpty
@@ -68,7 +68,7 @@ CooInteractionAndSelectionIntegrationTest >> testDualHandlerAccumulatesAcrossMan
 		| entry item |
 		entry := self fakeGlobalEntryWithContents: 'Class', i asString.
 		item := self fakeInteractionItemWithToken: 'Cl' selectedIndex: 1 choices: { entry }.
-		dualHandler handleNewSelectionItem: item addedTo: #() ].
+		dualHandler handleNewSelectionItem: item].
 
 	self assert: dualHandler sortedUserUppercasedEntries size equals: 5.
 	self assert: dualHandler sortedUserLowercasedEntries isEmpty
@@ -83,13 +83,13 @@ CooInteractionAndSelectionIntegrationTest >> testDualHandlerDecayOnlyAffectsOwnC
 
 	upperEntry := self fakeGlobalEntryWithContents: 'OrderedCollection'.
 	upperItem := self fakeInteractionItemWithToken: 'Ord' selectedIndex: 1 choices: { upperEntry }.
-	dualHandler handleNewSelectionItem: upperItem addedTo: #().
+	dualHandler handleNewSelectionItem: upperItem.
 
 	"Now add 20 lowercase entries - should NOT decay OrderedCollection"
 	1 to: 20 do: [ :i |
 		lowerEntry := self fakeEntryWithContents: 'method', i asString.
 		lowerItem := self fakeInteractionItemWithToken: 'me' selectedIndex: 1 choices: { lowerEntry }.
-		dualHandler handleNewSelectionItem: lowerItem addedTo: #() ].
+		dualHandler handleNewSelectionItem: lowerItem].
 
 	"OrderedCollection should still be the only uppercase entry, undecayed"
 	self assert: dualHandler sortedUserUppercasedEntries size equals: 1.
@@ -170,8 +170,8 @@ CooInteractionAndSelectionIntegrationTest >> testMostRecentHandlerWithSingleChar
 	itemA := self fakeInteractionItemWithToken: 'a' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'a' selectedIndex: 1 choices: { entryB }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
-	handler handleNewSelectionItem: itemB addedTo: #().
+	handler handleNewSelectionItem: itemA.
+	handler handleNewSelectionItem: itemB.
 
 	"Both registered, last one wins"
 	self assert: handler sortedRecentChoices first contents equals: 'add:'.

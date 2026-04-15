@@ -20,6 +20,14 @@ Class {
 }
 
 { #category : 'tracking' }
+CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem [
+
+	aSelectionItem token first isLowercase 
+		ifTrue: [self incrementLowercasedUsageFor: aSelectionItem selectedItemEntry]
+		ifFalse: [self incrementUppercasedUsageFor: aSelectionItem selectedItemEntry]
+]
+
+{ #category : 'tracking' }
 CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
 
 	aSelectionItem token first isLowercase 

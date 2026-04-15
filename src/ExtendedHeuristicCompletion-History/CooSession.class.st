@@ -182,7 +182,7 @@ CooSession >> addCompletionItem: aCompletionEntryItem [
 	
 	"Instead of poking the handler during each addition we could pass it all the info when 
 	requesting a list of entries."
-	userSelectionHandler handleNewSelectionItem: item addedTo: completionItems
+	userSelectionHandler handleNewSelectionItem: item
 ]
 
 { #category : 'method handling' }

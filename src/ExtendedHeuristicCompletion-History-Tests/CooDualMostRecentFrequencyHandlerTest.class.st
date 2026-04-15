@@ -42,9 +42,9 @@ CooDualMostRecentFrequencyHandlerTest >> testAddingUppercaseDoesNotDecayLowercas
 	selectorItem := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { selectorEntry }.
 	classItem := self fakeInteractionItemWithToken: 'Ord' selectedIndex: 1 choices: { classEntry }.
 
-	handler handleNewSelectionItem: selectorItem addedTo: #().
+	handler handleNewSelectionItem: selectorItem.
 
-	20 timesRepeat: [ handler handleNewSelectionItem: classItem addedTo: #() ].
+	20 timesRepeat: [ handler handleNewSelectionItem: classItem].
 	self assert: handler sortedUserLowercasedEntries size equals: 1.
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'collect:'
 ]
@@ -58,8 +58,8 @@ CooDualMostRecentFrequencyHandlerTest >> testDecayWithinLowercaseDict [
 	itemA := self fakeInteractionItemWithToken: 'al' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'be' selectedIndex: 1 choices: { entryB }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
-	handler handleNewSelectionItem: itemB addedTo: #().
+	handler handleNewSelectionItem: itemA.
+	handler handleNewSelectionItem: itemB.
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'beta'
 ]
 
@@ -72,8 +72,8 @@ CooDualMostRecentFrequencyHandlerTest >> testDecayWithinUppercaseDict [
 	itemA := self fakeInteractionItemWithToken: 'Ar' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'Ba' selectedIndex: 1 choices: { entryB }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
-	handler handleNewSelectionItem: itemB addedTo: #().
+	handler handleNewSelectionItem: itemA.
+	handler handleNewSelectionItem: itemB.
 	self assert: handler sortedUserUppercasedEntries first contents equals: 'Bag'
 ]
 
@@ -93,8 +93,8 @@ CooDualMostRecentFrequencyHandlerTest >> testLowercaseAndUppercaseAreSeparateWor
 	selectorItem := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { selectorEntry }.
 	classItem := self fakeInteractionItemWithToken: 'Ord' selectedIndex: 1 choices: { classEntry }.
 
-	5 timesRepeat: [ handler handleNewSelectionItem: selectorItem addedTo: #() ].
-	handler handleNewSelectionItem: classItem addedTo: #().
+	5 timesRepeat: [ handler handleNewSelectionItem: selectorItem].
+	handler handleNewSelectionItem: classItem.
 
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'collect:'.
 	self assert: handler sortedUserUppercasedEntries first contents equals: 'OrderedCollection'.
@@ -108,7 +108,7 @@ CooDualMostRecentFrequencyHandlerTest >> testLowercaseTokenGoesToLowercaseDictio
 	| entry item |
 	entry := self fakeEntryWithContents: 'collect:'.
 	item := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { entry }.
-	handler handleNewSelectionItem: item addedTo: #().
+	handler handleNewSelectionItem: item.
 
 	self assert: handler sortedUserLowercasedEntries size equals: 1.
 	self assert: handler sortedUserLowercasedEntries first contents equals: 'collect:'.
@@ -122,7 +122,7 @@ CooDualMostRecentFrequencyHandlerTest >> testSortedUserLowercasedEntriesCapsAt5 
 		| entry item |
 		entry := self fakeEntryWithContents: 'method', i asString.
 		item := self fakeInteractionItemWithToken: 'me' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #() ].
+		handler handleNewSelectionItem: item].
 
 	self assert: handler sortedUserLowercasedEntries size equals: 5
 ]
@@ -134,7 +134,7 @@ CooDualMostRecentFrequencyHandlerTest >> testSortedUserUppercasedEntriesCapsAt5 
 		| entry item |
 		entry := self fakeEntryWithContents: 'Class', i asString.
 		item := self fakeInteractionItemWithToken: 'Cl' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #() ].
+		handler handleNewSelectionItem: item].
 
 	self assert: handler sortedUserUppercasedEntries size equals: 5
 ]
@@ -145,7 +145,7 @@ CooDualMostRecentFrequencyHandlerTest >> testUppercaseTokenGoesToUppercaseDictio
 	| entry item |
 	entry := self fakeEntryWithContents: 'OrderedCollection'.
 	item := self fakeInteractionItemWithToken: 'Ord' selectedIndex: 1 choices: { entry }.
-	handler handleNewSelectionItem: item addedTo: #().
+	handler handleNewSelectionItem: item.
 
 	self assert: handler sortedUserUppercasedEntries size equals: 1.
 	self assert: handler sortedUserUppercasedEntries first contents equals: 'OrderedCollection'.

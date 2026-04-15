@@ -42,13 +42,13 @@ CooDecayConvergenceTest >> testAncientEntryBecomesNegligibleAfterManyInsertions 
 	ancientEntry := self fakeEntryWithContents: 'ancient'.
 	ancientItem := self fakeInteractionItemWithToken: 'an' selectedIndex: 1 choices: { ancientEntry }.
 
-	handler handleNewSelectionItem: ancientItem addedTo: #().
+	handler handleNewSelectionItem: ancientItem.
 
 	1 to: 20 do: [ :i |
 		| entry item |
 		entry := self fakeEntryWithContents: 'newer', i asString.
 		item := self fakeInteractionItemWithToken: 'ne' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #() ].
+		handler handleNewSelectionItem: item ].
 
 	"ancient should be the very last entry because its frequency was decayed 20 times"
 	self assert: handler sortedRecentChoices last contents equals: 'ancient'
@@ -66,11 +66,11 @@ CooDecayConvergenceTest >> testComebackEntryOvertakesDecayedLeader [
 	itemA := self fakeInteractionItemWithToken: 'co' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'do' selectedIndex: 1 choices: { entryB }.
 
-	5 timesRepeat: [ handler handleNewSelectionItem: itemA addedTo: #() ].
-	10 timesRepeat: [ handler handleNewSelectionItem: itemB addedTo: #() ].
+	5 timesRepeat: [ handler handleNewSelectionItem: itemA].
+	10 timesRepeat: [ handler handleNewSelectionItem: itemB ].
 
 	"Now comeback tries to catch up"
-	3 timesRepeat: [ handler handleNewSelectionItem: itemA addedTo: #() ].
+	3 timesRepeat: [ handler handleNewSelectionItem: itemA].
 
 	"comeback was selected most recently so it should be first now"
 	self assert: handler sortedRecentChoices first contents equals: 'comeback'
@@ -89,9 +89,9 @@ CooDecayConvergenceTest >> testDecayIsMultiplicativeNotAdditive [
 	itemB := self fakeInteractionItemWithToken: 'be' selectedIndex: 1 choices: { entryB }.
 	itemC := self fakeInteractionItemWithToken: 'ga' selectedIndex: 1 choices: { entryC }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
-	handler handleNewSelectionItem: itemB addedTo: #().
-	handler handleNewSelectionItem: itemC addedTo: #().
+	handler handleNewSelectionItem: itemA.
+	handler handleNewSelectionItem: itemB.
+	handler handleNewSelectionItem: itemC.
 
 	"alpha still exists in the sorted list (frequency ~0.25, not zero)"
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'alpha' ])
@@ -106,14 +106,14 @@ CooDecayConvergenceTest >> testDecayNeverProducesNegativeFrequency [
 	firstEntry := self fakeEntryWithContents: 'sentinel'.
 	firstItem := self fakeInteractionItemWithToken: 'se' selectedIndex: 1 choices: { firstEntry }.
 
-	handler handleNewSelectionItem: firstItem addedTo: #().
+	handler handleNewSelectionItem: firstItem.
 
 	"Add 50 distinct entries to decay 'sentinel' 50 times"
 	1 to: 50 do: [ :i |
 		| entry item |
 		entry := self fakeEntryWithContents: 'other', i asString.
 		item := self fakeInteractionItemWithToken: 'ot' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #() ].
+		handler handleNewSelectionItem: item ].
 
 	"sentinel should still be in the list (frequency > 0, just very small)"
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'sentinel' ])
@@ -130,13 +130,13 @@ CooDecayConvergenceTest >> testHighFrequencyEntryResistsDecay [
 	heavyEntry := self fakeEntryWithContents: 'heavyweight'.
 	heavyItem := self fakeInteractionItemWithToken: 'he' selectedIndex: 1 choices: { heavyEntry }.
 
-	100 timesRepeat: [ handler handleNewSelectionItem: heavyItem addedTo: #() ].
+	100 timesRepeat: [ handler handleNewSelectionItem: heavyItem].
 
 	1 to: 5 do: [ :i |
 		| entry item |
 		entry := self fakeEntryWithContents: 'light', i asString.
 		item := self fakeInteractionItemWithToken: 'li' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #() ].
+		handler handleNewSelectionItem: item ].
 
 	"heavyweight should still be in the results"
 	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'heavyweight' ])
@@ -151,7 +151,7 @@ CooDecayConvergenceTest >> testRepeatedSelectionOfSameEntryConverges [
 	entry := self fakeEntryWithContents: 'repeated'.
 	item := self fakeInteractionItemWithToken: 're' selectedIndex: 1 choices: { entry }.
 
-	200 timesRepeat: [ handler handleNewSelectionItem: item addedTo: #() ].
+	200 timesRepeat: [ handler handleNewSelectionItem: item ].
 
 	"Only one entry, and its frequency should be bounded (not grow unbounded)"
 	self assert: handler sortedRecentChoices size equals: 1
@@ -169,8 +169,8 @@ CooDecayConvergenceTest >> testTwoEntryOscillationReachesEquilibrium [
 	itemB := self fakeInteractionItemWithToken: 'po' selectedIndex: 1 choices: { entryB }.
 
 	50 timesRepeat: [
-		handler handleNewSelectionItem: itemA addedTo: #().
-		handler handleNewSelectionItem: itemB addedTo: #() ].
+		handler handleNewSelectionItem: itemA.
+		handler handleNewSelectionItem: itemB].
 
 	"Both should be present in results"
 	self assert: handler sortedRecentChoices size equals: 2.

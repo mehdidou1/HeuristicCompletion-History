@@ -43,9 +43,9 @@ CooMostRecentFrequencyHandlerTest >> testDecayReducesOldEntriesFrequency [
 	itemA := self fakeInteractionItemWithToken: 'al' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'be' selectedIndex: 1 choices: { entryB }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
+	handler handleNewSelectionItem: itemA.
 	"alpha freq = 1"
-	handler handleNewSelectionItem: itemB addedTo: #().
+	handler handleNewSelectionItem: itemB.
 	"alpha freq = 1 * 0.5 = 0.5, beta freq = 1"
 
 	"beta should be first because its frequency is higher"
@@ -66,7 +66,7 @@ CooMostRecentFrequencyHandlerTest >> testLowercasedAndUppercasedReturnSameAsGene
 	| entry item |
 	entry := self fakeEntryWithContents: 'collect:'.
 	item := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { entry }.
-	handler handleNewSelectionItem: item addedTo: #().
+	handler handleNewSelectionItem: item.
 
 	self assert: handler sortedUserLowercasedEntries size equals: handler sortedUserUppercasedEntries size.
 	self assert: handler sortedUserLowercasedEntries size equals: handler sortedUserEntries size
@@ -83,8 +83,8 @@ CooMostRecentFrequencyHandlerTest >> testRecentSelectionOvertakesOldFrequent [
 	itemA := self fakeInteractionItemWithToken: 'al' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'be' selectedIndex: 1 choices: { entryB }.
 
-	handler handleNewSelectionItem: itemA addedTo: #().
-	3 timesRepeat: [ handler handleNewSelectionItem: itemB addedTo: #() ].
+	handler handleNewSelectionItem: itemA.
+	3 timesRepeat: [ handler handleNewSelectionItem: itemB].
 
 	self assert: handler sortedRecentChoices first contents equals: 'beta'
 ]
@@ -99,8 +99,8 @@ CooMostRecentFrequencyHandlerTest >> testRepeatedSelectionOvercomesDecay [
 	itemA := self fakeInteractionItemWithToken: 'al' selectedIndex: 1 choices: { entryA }.
 	itemB := self fakeInteractionItemWithToken: 'be' selectedIndex: 1 choices: { entryB }.
 
-	10 timesRepeat: [ handler handleNewSelectionItem: itemA addedTo: #() ].
-	handler handleNewSelectionItem: itemB addedTo: #().
+	10 timesRepeat: [ handler handleNewSelectionItem: itemA].
+	handler handleNewSelectionItem: itemB.
 
 	"alpha was selected 10 times, decayed once by 0.5. Its accumulated freq should still be high.
 	 beta was selected 1 time. alpha should still be first."
@@ -115,8 +115,8 @@ CooMostRecentFrequencyHandlerTest >> testSameEntrySelectedTwiceIncrementsFrequen
 	entry := self fakeEntryWithContents: 'collect:'.
 	item := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { entry }.
 
-	handler handleNewSelectionItem: item addedTo: #().
-	handler handleNewSelectionItem: item addedTo: #().
+	handler handleNewSelectionItem: item.
+	handler handleNewSelectionItem: item.
 
 	self assert: handler sortedRecentChoices size equals: 1
 ]
@@ -128,7 +128,7 @@ CooMostRecentFrequencyHandlerTest >> testSingleSelectionIsReturned [
 	entry := self fakeEntryWithContents: 'collect:'.
 	item := self fakeInteractionItemWithToken: 'col' selectedIndex: 1 choices: { entry }.
 
-	handler handleNewSelectionItem: item addedTo: #().
+	handler handleNewSelectionItem: item.
 
 	self assert: handler sortedRecentChoices size equals: 1.
 	self assert: handler sortedRecentChoices first contents equals: 'collect:'
@@ -142,7 +142,7 @@ CooMostRecentFrequencyHandlerTest >> testSortedUserEntriesReturnsAllWhenLessThan
 		| entry item |
 		entry := self fakeEntryWithContents: 'entry', i asString.
 		item := self fakeInteractionItemWithToken: 'en' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #().
+		handler handleNewSelectionItem: item.
 		entry ].
 
 	self assert: handler sortedUserEntries size equals: 3
@@ -157,7 +157,7 @@ CooMostRecentFrequencyHandlerTest >> testSortedUserEntriesReturnsAtMost5 [
 		| entry item |
 		entry := self fakeEntryWithContents: 'entry', i asString.
 		item := self fakeInteractionItemWithToken: 'en' selectedIndex: 1 choices: { entry }.
-		handler handleNewSelectionItem: item addedTo: #().
+		handler handleNewSelectionItem: item.
 		entry ].
 
 	self assert: handler sortedUserEntries size equals: 5
