@@ -73,7 +73,8 @@ CooDecayConvergenceTest >> testComebackEntryOvertakesDecayedLeader [
 	3 timesRepeat: [ handler handleNewSelectionItem: itemA].
 
 	"comeback was selected most recently so it should be first now"
-	self assert: handler sortedRecentChoices first contents equals: 'comeback'
+	self assert: handler sortedRecentChoices first contents equals: 'comeback'.
+	self assert: handler sortedRecentChoices second contents equals: 'dominant'
 ]
 
 { #category : 'tests' }
@@ -139,7 +140,7 @@ CooDecayConvergenceTest >> testHighFrequencyEntryResistsDecay [
 		handler handleNewSelectionItem: item ].
 
 	"heavyweight should still be in the results"
-	self assert: (handler sortedRecentChoices anySatisfy: [ :e | e contents = 'heavyweight' ])
+	self assert: handler sortedRecentChoices first contents equals: 'heavyweight'
 ]
 
 { #category : 'tests' }
@@ -175,5 +176,6 @@ CooDecayConvergenceTest >> testTwoEntryOscillationReachesEquilibrium [
 	"Both should be present in results"
 	self assert: handler sortedRecentChoices size equals: 2.
 	"The last one selected (pong) should be ranked first due to recency"
-	self assert: handler sortedRecentChoices first contents equals: 'pong'
+	self assert: handler sortedRecentChoices first contents equals: 'pong'.
+
 ]

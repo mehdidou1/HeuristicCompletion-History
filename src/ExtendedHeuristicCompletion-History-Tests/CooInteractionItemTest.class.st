@@ -14,7 +14,8 @@ CooInteractionItemTest >> testFetchersAreStored [
 	item fetchers: #('CoASTFetcher' 'CooMessageSessionFetcher').
 
 	self assert: item fetchers size equals: 2.
-	self assert: (item fetchers includes: 'CooMessageSessionFetcher')
+	self assert: (item fetchers includes: 'CooMessageSessionFetcher').
+	self assert: (item fetchers includes: 'CoASTFetcher')
 ]
 
 { #category : 'tests' }
