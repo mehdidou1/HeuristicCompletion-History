@@ -62,36 +62,12 @@ CooTemporalHandler >> handleNewClassItem: anItem [
 ]
 
 { #category : 'api' }
-CooTemporalHandler >> handleNewClassItem: anItem addedTo: aCollection [
-	"here we will have to manage the incremental management of the new event see comments in selectorentries."
-	
-	(anItem event = #removed)
-		ifTrue: [ 
-			"when a class was removed we remove all the class addition with the same name"
-			classDescriptions := classDescriptions reject: [ :each | each nameOfClass = anItem nameOfClass] ]
-		ifFalse: [  classDescriptions addFirst: anItem ]
-	
-]
-
-{ #category : 'api' }
 CooTemporalHandler >> handleNewMethodItem: anItem [
 
 	anItem event = #removed
 		ifTrue: [ "when a method is removed we remove all the method addition and modification of that method"
 			self removeMethodItem: anItem ]
 		ifFalse: [ methodDescriptions addFirst: anItem ]
-]
-
-{ #category : 'api' }
-CooTemporalHandler >> handleNewMethodItem: anItem addedTo: aCollection [
-	
-	(anItem event = #removed)
-		ifTrue: [ 
-			"when a method is removed we remove all the method addition and modification of that method"
-			methodDescriptions := methodDescriptions reject: [ :each | 
-			 each nameOfClass = anItem nameOfClass and: [ each selector = anItem selector ] ] ]
-		ifFalse: [  methodDescriptions addFirst: anItem ]
-	
 ]
 
 { #category : 'initialization' }

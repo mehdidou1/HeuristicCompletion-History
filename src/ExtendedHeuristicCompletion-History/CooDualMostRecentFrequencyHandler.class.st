@@ -28,14 +28,6 @@ CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem [
 ]
 
 { #category : 'tracking' }
-CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
-
-	aSelectionItem token first isLowercase 
-		ifTrue: [self incrementLowercasedUsageFor: aSelectionItem selectedItemEntry]
-		ifFalse: [self incrementUppercasedUsageFor: aSelectionItem selectedItemEntry]
-]
-
-{ #category : 'tracking' }
 CooDualMostRecentFrequencyHandler >> incrementLowercasedUsageFor: anEntry [
 	"using a dictionary is probably not efficient because after we will sort the key based on their frequency"
 

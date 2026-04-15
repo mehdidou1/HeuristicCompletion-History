@@ -25,12 +25,6 @@ CooMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem [
 ]
 
 { #category : 'tracking' }
-CooMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
-
-	self incrementUsageFor: aSelectionItem selectedItemEntry
-]
-
-{ #category : 'tracking' }
 CooMostRecentFrequencyHandler >> incrementUsageFor: anEntry [
 	"using a dictionary is probably not efficient because after we will sort the key based on their frequency"
 	"we keep the entry and not just its contents because entries are typed so we can later filter the one for global or method"
