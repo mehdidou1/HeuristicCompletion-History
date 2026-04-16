@@ -32,7 +32,6 @@ CooFrequencyHandler >> handleNewClassItem: anItem [
 
 	| key |
 	key := anItem nameOfClass.
-	
 	"to be changed"
 	(#(#added #modified) includes: anItem event) 
 		ifTrue: [ 
@@ -44,9 +43,12 @@ CooFrequencyHandler >> handleNewClassItem: anItem [
  	(anItem event = #removed)
 		ifTrue: [ 
 			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			classFrequencyDictionary removeKey: key ifAbsent: [  ]
+			classFrequencyDictionary removeKey: key ifAbsent: [  ].
+			classFrequencyDictionary removeKey: (key, ' class') asSymbol ifAbsent: [  ].
+			
+			]
 		
-		  ]
+
 	 
 
 ]
@@ -57,20 +59,24 @@ CooFrequencyHandler >> handleNewMethodItem: anItem [
 	
 	| key |
 	key :=  anItem selector.
-	
 	"to be changed"
 	(#(#added #modified) includes: anItem event) 
 		ifTrue: [ 
 			selectorFrequenceDictionary 
 				at: key
-				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
+				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1]
+				ifAbsentPut: [ 1 ].
+					"We made added or made changes to a method, we should increment the frequency of that class"
+					classFrequencyDictionary at: anItem nameOfClass 
+						ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value + 1 ]                        ifAbsent: [ classFrequencyDictionary at: anItem nameOfClass put: 1 ]
+					].
 	
  	(anItem event = #removed)
 		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			selectorFrequenceDictionary removeKey: key ifAbsent: [  ]
-		
+			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved"
+			selectorFrequenceDictionary at: key
+    			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]
+
 		  ]
 ]
 

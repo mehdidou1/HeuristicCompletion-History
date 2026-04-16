@@ -36,15 +36,13 @@ CooFrequencyRankingStabilityTest >> testInterleaveAddRemoveAddForMultipleSelecto
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #bar; nameOfClass: 'A'; yourself).
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #baz; nameOfClass: 'A'; yourself).
-	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #bar; nameOfClass: 'A'; yourself).
-	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself). 
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #baz; nameOfClass: 'A'; yourself). 
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #bar; nameOfClass: 'A'; yourself). 
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).   
 
-	"foo(1), baz(1) should remain; bar was removed"
-	self assert: handler selectorEntries size equals: 2.
-	self assert: ((handler selectorEntries collect: [ :e | e selector ]) includesAll: { #foo . #baz }).
-	self deny: ((handler selectorEntries collect: [ :e | e selector ]) includes: #bar)
+	self assert: handler selectorEntries size equals: 3.
+	self assert: ((handler selectorEntries collect: [ :e | e selector ]) includesAll: { #foo . #baz . #bar}).
 ]
 
 { #category : 'tests' }
@@ -126,8 +124,8 @@ CooFrequencyRankingStabilityTest >> testRemoveAndReAddResetsFrequency [
 		handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #bar; nameOfClass: 'A'; yourself)].
 
 	"bar(2) > foo(1)"
-	self assert: handler selectorEntries first selector equals: #bar.
-	self assert: handler selectorEntries second selector equals: #foo
+	self assert: handler selectorEntries first selector equals: #foo.
+	self assert: handler selectorEntries second selector equals: #bar
 ]
 
 { #category : 'tests' }

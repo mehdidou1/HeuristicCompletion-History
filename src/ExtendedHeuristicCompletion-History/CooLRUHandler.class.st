@@ -33,6 +33,9 @@ CooLRUHandler >> classEntries [
 { #category : 'matching' }
 CooLRUHandler >> handleNewClassItem: anItem [
 
+"handle  events "
+"When deleting, we must delete all methods related to that class"
+
 	classLRU at: anItem nameOfClass put: anItem
 ]
 

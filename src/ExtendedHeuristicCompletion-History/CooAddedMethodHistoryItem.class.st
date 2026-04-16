@@ -11,3 +11,9 @@ CooAddedMethodHistoryItem >> event [
 
 	^ #added
 ]
+
+{ #category : 'accessing' }
+CooAddedMethodHistoryItem >> fullName [
+	
+	^ self nameOfClass, '>>#', self selector 
+]
