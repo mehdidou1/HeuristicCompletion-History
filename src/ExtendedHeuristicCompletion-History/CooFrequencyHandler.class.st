@@ -11,7 +11,8 @@ Class {
 	#superclass : 'CooProgramEntityHandler',
 	#instVars : [
 		'classFrequencyDictionary',
-		'selectorFrequenceDictionary'
+		'selectorFrequenceDictionary',
+		'classToMethodsMap'
 	],
 	#category : 'ExtendedHeuristicCompletion-History-Session',
 	#package : 'ExtendedHeuristicCompletion-History',
@@ -28,9 +29,19 @@ CooFrequencyHandler >> classEntries [
 ]
 
 { #category : 'matching' }
+CooFrequencyHandler >> classToMethodsMap [ 
+	^ classToMethodsMap 
+]
+
+{ #category : 'matching' }
+CooFrequencyHandler >> frequencyOfMethod: aSelector [
+	^ selectorFrequenceDictionary at: aSelector value
+]
+
+{ #category : 'matching' }
 CooFrequencyHandler >> handleNewClassItem: anItem [
 
-	| key |
+	| key classes|
 	key := anItem nameOfClass.
 	"to be changed"
 	(#(#added #modified) includes: anItem event) 
@@ -39,18 +50,22 @@ CooFrequencyHandler >> handleNewClassItem: anItem [
 				at: key
 				ifPresent: [:v  | classFrequencyDictionary at: key put: v + 1 ]
 				ifAbsentPut: [ 1 ] ].
+			"We initialize the new correspending OrderedCollection if it is a new class"
+			classToMethodsMap at: key 
+			ifAbsentPut: OrderedCollection new.
 	
  	(anItem event = #removed)
 		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
 			classFrequencyDictionary removeKey: key ifAbsent: [  ].
 			classFrequencyDictionary removeKey: (key, ' class') asSymbol ifAbsent: [  ].
-			
+			"extract the methods of the class in question, 
+			for each method we decrement its frequency
+			We don't need the correspendance item anymore, we should delete it 
+			"
+			classes := classToMethodsMap at:key value.
+			classes do: [ :m | (selectorFrequenceDictionary includesKey: m) ifTrue: [ selectorFrequenceDictionary at: m put: (selectorFrequenceDictionary at: m) - 1 ] ].
+			classToMethodsMap removeKey: key
 			]
-		
-
-	 
-
 ]
 
 { #category : 'matching' }
@@ -68,14 +83,24 @@ CooFrequencyHandler >> handleNewMethodItem: anItem [
 				ifAbsentPut: [ 1 ].
 					"We made added or made changes to a method, we should increment the frequency of that class"
 					classFrequencyDictionary at: anItem nameOfClass 
-						ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value + 1 ]                        ifAbsent: [ classFrequencyDictionary at: anItem nameOfClass put: 1 ]
+						ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value + 1 ]                       
+						ifAbsent: [ classFrequencyDictionary at: anItem nameOfClass put: 1 ]. 
+					(classToMethodsMap
+    					at: anItem nameOfClass
+    					ifAbsentPut: [ OrderedCollection new ])
+        				add: key.
 					].
 	
  	(anItem event = #removed)
 		ifTrue: [ 
-			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved"
+			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved, in the oother hand, if the method's class does not exist in classEntries then we do nothing"
 			selectorFrequenceDictionary at: key
-    			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]
+    			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]. 
+			(classToMethodsMap includesKey: anItem nameOfClass)
+    ifTrue: [
+        (classToMethodsMap at: anItem nameOfClass)
+            remove: key ifAbsent: [ ].
+    ].
 
 		  ]
 ]
@@ -85,7 +110,9 @@ CooFrequencyHandler >> initialize [
 
 	super initialize.
 	classFrequencyDictionary := Dictionary new.
-	selectorFrequenceDictionary := Dictionary new
+	selectorFrequenceDictionary := Dictionary new.
+	classToMethodsMap := Dictionary new
+	
 ]
 
 { #category : 'matching' }
@@ -95,4 +122,9 @@ CooFrequencyHandler >> selectorEntries [
 			  (CoSessionSelectorEntry contents: each key node: nil)
 				  sessionItem: each;
 				  fetcherName: 'Session Frequency' ]
+]
+
+{ #category : 'matching' }
+CooFrequencyHandler >> selectorFrequencies [ 
+	^ selectorFrequenceDictionary values
 ]
