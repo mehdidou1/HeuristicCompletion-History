@@ -34,6 +34,11 @@ CooFrequencyHandler >> classToMethodsMap [
 ]
 
 { #category : 'matching' }
+CooFrequencyHandler >> frequencyOfClass: aClass [
+	^ classFrequencyDictionary at: aClass value
+]
+
+{ #category : 'matching' }
 CooFrequencyHandler >> frequencyOfMethod: aSelector [
 	^ selectorFrequenceDictionary at: aSelector value
 ]
@@ -96,6 +101,10 @@ CooFrequencyHandler >> handleNewMethodItem: anItem [
 			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved, in the oother hand, if the method's class does not exist in classEntries then we do nothing"
 			selectorFrequenceDictionary at: key
     			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]. 
+			"Decrease that class frequency"
+			classFrequencyDictionary at: anItem nameOfClass 
+				ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value -1 ].
+			"Update the associations"
 			(classToMethodsMap includesKey: anItem nameOfClass)
     ifTrue: [
         (classToMethodsMap at: anItem nameOfClass)
