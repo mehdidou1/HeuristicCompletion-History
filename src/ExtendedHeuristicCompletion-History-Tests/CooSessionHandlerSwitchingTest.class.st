@@ -40,7 +40,7 @@ CooSessionHandlerSwitchingTest >> testDoubleShiftRoundTripsCorrectly [
 		self makeMethodItem: #debt className: 'Point'
 	}.
 
-	session shiftHandlerTo: CooFrequencyHandler new.
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new.
 	self assert: session selectorEntries size equals: 2.
 
 	session shiftHandlerTo: CooTemporalHandler new.
@@ -52,7 +52,7 @@ CooSessionHandlerSwitchingTest >> testFrequencyToTemporalExpandsBack [
 	"Start with Frequency (deduplicates), then switch to Temporal (keeps all).
 	 Since shiftHandlerTo re-feeds all methodDescriptions, Temporal should show all items."
 
-	session programEntityHandler: CooFrequencyHandler new.
+	session programEntityHandler: CooWeightedClassFrequencyHandler new.
 
 	self addMethodItems: {
 		self makeMethodItem: #degrees className: 'Point'.
@@ -76,7 +76,7 @@ CooSessionHandlerSwitchingTest >> testShiftAlsoRePopulatesClassItems [
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Rectangle'; yourself).
 	session addClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Point'; yourself).
 
-	session shiftHandlerTo: CooFrequencyHandler new.
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new.
 
 	"Frequency should deduplicate classes: Point(2) > Rectangle(1)"
 	self assert: session programEntityHandler classEntries size equals: 2.
@@ -95,17 +95,15 @@ CooSessionHandlerSwitchingTest >> testShiftPreservesMethodDescriptions [
 
 	self assert: session methodDescriptions size equals: 3.
 
-	session shiftHandlerTo: CooFrequencyHandler new.
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new.
 	self assert: session methodDescriptions size equals: 3.
 
-	session shiftHandlerTo: CooLRUHandler new.
-	self assert: session methodDescriptions size equals: 3
 ]
 
 { #category : 'tests' }
 CooSessionHandlerSwitchingTest >> testShiftWithEmptySessionDoesNotBreak [
 
-	session shiftHandlerTo: CooFrequencyHandler new.
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new.
 	self assert: session selectorEntries size equals: 0.
 	self assert: session programEntityHandler classEntries size equals: 0
 ]
@@ -124,25 +122,10 @@ CooSessionHandlerSwitchingTest >> testTemporalToFrequencyDeduplicates [
 
 	self assert: session selectorEntries size equals: 4.
 
-	session shiftHandlerTo: CooFrequencyHandler new.
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new.
 
 	self assert: session selectorEntries size equals: 2.
 	self
 		assert: (session selectorEntries collect: [ :each | each selector ])
 		equals: #(#degrees #debt) asOrderedCollection
-]
-
-{ #category : 'tests' }
-CooSessionHandlerSwitchingTest >> testTemporalToLRUDeduplicates [
-	"LRU should also deduplicate since it stores by key."
-
-	self addMethodItems: {
-		self makeMethodItem: #degrees className: 'Point'.
-		self makeMethodItem: #degrees className: 'Point'.
-		self makeMethodItem: #debt className: 'Point'
-	}.
-
-	session shiftHandlerTo: CooLRUHandler new.
-
-	self assert: session selectorEntries size equals: 2
 ]

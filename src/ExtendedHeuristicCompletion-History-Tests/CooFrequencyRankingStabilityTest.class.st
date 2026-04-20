@@ -13,7 +13,7 @@ Class {
 CooFrequencyRankingStabilityTest >> setUp [ 
 
 	super setUp.
-	handler := CooFrequencyHandler new
+	handler := CooWeightedClassFrequencyHandler new
 ]
 
 { #category : 'tests' }
@@ -82,7 +82,7 @@ CooFrequencyRankingStabilityTest >> testRankingIsDeterministic [
 	"Adding the same items in the same order should always produce the same ranking."
 
 	| handler2 |
-	handler2 := CooFrequencyHandler new.
+	handler2 := CooWeightedClassFrequencyHandler new.
 
 	#(#alpha #beta #gamma #alpha #alpha #beta) do: [ :sel |
 		| item |

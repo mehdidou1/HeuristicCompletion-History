@@ -44,6 +44,33 @@ CooFrequencyHandlerTest >> testAddingClassesSortsTheMostFrequent [
 	self assert: handler classEntries first contents equals: 'AnotherTestClass' 
 ]
 
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testAddingMethodDoesNotAffectClassFrequency [
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself). 
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+	
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself).
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+	
+	
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testAddingMethodToInexistingClassAddsTheClass [	
+	
+	self assert: handler classEntries isEmpty.
+	
+	
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself).
+	
+	self assert: handler classEntries size equals: 1.
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 0.
+	self assert: (handler classToMethodsMap size) equals: 1.
+	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (Set new add: #foo; yourself )
+]
+
 { #category : 'tests - class' }
 CooFrequencyHandlerTest >> testAddingThreeTimesTheSame [
 
@@ -66,6 +93,59 @@ CooFrequencyHandlerTest >> testAddingThreeTimesTheSame [
 	handler handleNewClassItem: aDifferentOne.
 	
 	self assert: handler classEntries size equals: 2
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testDeleteClassDecrementsMethodFrequency [
+
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself). 
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself). 
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #bar; nameOfClass: 'ClassA'; yourself). 
+	self assert: (handler frequencyOfMethod: #foo) equals: 2.
+	self assert: (handler frequencyOfMethod: #bar) equals: 1.
+	
+	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'ClassA'; yourself).
+	
+	self assert: (handler frequencyOfMethod: #foo) equals: 1.
+	self assert: (handler frequencyOfMethod: #bar) equals: 0.		
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testDeleteMethodDoesNotAffectClassFrequency [
+
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+		
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testModifyMethodDoesNotAffectClassFrequency [
+
+	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
+	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+		
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: (handler frequencyOfClass: 'ClassA') equals: 1.
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testModifyMethodToInexistingClassAddsTheClass [	
+	
+	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: (handler classEntries size) equals: 1.
+	self assert: (handler classToMethodsMap size) equals: 1. 
+	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (Set new add: #foo; yourself )
 ]
 
 { #category : 'tests - selectors' }
@@ -133,6 +213,15 @@ CooFrequencyHandlerTest >> testRemoveMethodDecrementsMethodFrequency [
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #m2; nameOfClass: 'Class'; yourself ).
 	
 	self assert: handler selectorEntries second contents  equals: #m2
+]
+
+{ #category : 'tests - selectors' }
+CooFrequencyHandlerTest >> testRemoveMethodFromInexistingClassDoesNotCrash [
+	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ). 
+	
+	self assert: handler selectorEntries isEmpty.
+	self assert: handler classEntries isEmpty.
+	self assert: handler classToMethodsMap isEmpty.
 ]
 
 { #category : 'tests - selectors' }

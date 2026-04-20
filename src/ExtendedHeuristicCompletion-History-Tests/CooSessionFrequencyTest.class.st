@@ -10,7 +10,7 @@ Class {
 CooSessionFrequencyTest >> setUp [
 
 	super setUp.
-	session := CooSession new programEntityHandler: CooFrequencyHandler new
+	session := CooSession new programEntityHandler: CooWeightedClassFrequencyHandler new
 ]
 
 { #category : 'tests' }

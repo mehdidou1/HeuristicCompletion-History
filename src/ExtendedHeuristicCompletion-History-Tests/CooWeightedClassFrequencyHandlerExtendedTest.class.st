@@ -1,5 +1,5 @@
 Class {
-	#name : 'CooFrequencyHandlerExtendedTest',
+	#name : 'CooWeightedClassFrequencyHandlerExtendedTest',
 	#superclass : 'TestCase',
 	#instVars : [
 		'handler'
@@ -10,14 +10,14 @@ Class {
 }
 
 { #category : 'running' }
-CooFrequencyHandlerExtendedTest >> setUp [
+CooWeightedClassFrequencyHandlerExtendedTest >> setUp [
 
 	super setUp.
-	handler := CooFrequencyHandler new
+	handler := CooWeightedClassFrequencyHandler new
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testAddMethodWhenClassExistsIncrementsClassFrequency [
+CooWeightedClassFrequencyHandlerExtendedTest >> testAddMethodWhenClassExistsIncrementsClassFrequency [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA').
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassB').
 	"Normally Class B has the highest frequency, adding a method on Class A should make it the highest frequency class"
@@ -30,7 +30,7 @@ CooFrequencyHandlerExtendedTest >> testAddMethodWhenClassExistsIncrementsClassFr
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testAddMethodWithoutExistingClassAddsIt [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testAddMethodWithoutExistingClassAddsIt [ 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'Class'; yourself).
 	
 	self assert: handler classEntries size equals: 1.
@@ -38,7 +38,7 @@ CooFrequencyHandlerExtendedTest >> testAddMethodWithoutExistingClassAddsIt [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testAddingMethodIncrementsClassFrequency [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testAddingMethodIncrementsClassFrequency [ 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	
 	self assert: (handler frequencyOfClass: 'ClassA' ) equals: 1.
@@ -54,7 +54,7 @@ CooFrequencyHandlerExtendedTest >> testAddingMethodIncrementsClassFrequency [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassAndSelectorFrequenciesAreIndependent [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassAndSelectorFrequenciesAreIndependent [
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #widget; nameOfClass: 'A'; yourself).
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'B'; yourself).
@@ -64,18 +64,18 @@ CooFrequencyHandlerExtendedTest >> testClassAndSelectorFrequenciesAreIndependent
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAAddingAnClass [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAAddingAnClass [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself).
 	
 	self assert: handler classToMethodsMap size equals: 1.
 	self assert: (handler classToMethodsMap includesKey: 'ClassA').
-	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (OrderedCollection new).
+	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (Set new).
 	
 	
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnExistingClass [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnExistingClass [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	
@@ -87,7 +87,7 @@ CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnExis
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnInexistingClassAddsClassAndMethod [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnInexistingClassAddsClassAndMethod [
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	
 	self assert: handler classToMethodsMap size equals: 1.
@@ -96,22 +96,22 @@ CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAddingAMethodToAnInex
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenModifyingMethod [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenModifyingMethod [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'). 
 	
-	self assert: (handler classToMethodsMap at: 'ClassA') size equals: 2
+	self assert: (handler classToMethodsMap at: 'ClassA') size equals: 1
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemoveInexistingMethodDoesNotCrash [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemoveInexistingMethodDoesNotCrash [
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	self assert: handler classToMethodsMap isEmpty
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingAMethodRemovesItFromTheMap [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingAMethodRemovesItFromTheMap [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #bar; nameOfClass: 'ClassA'; yourself ).
@@ -122,7 +122,7 @@ CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingAMethodRemove
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingClassRemovesKeyFromMap [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingClassRemovesKeyFromMap [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
@@ -130,19 +130,19 @@ CooFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenRemovingClassRemovesK
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testClassToMethodMapIsEmptyWhenInitialized [
+CooWeightedClassFrequencyHandlerExtendedTest >> testClassToMethodMapIsEmptyWhenInitialized [
 	self assert: handler classToMethodsMap isEmpty 
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testEmptyHandlerReturnsEmptyEntries [
+CooWeightedClassFrequencyHandlerExtendedTest >> testEmptyHandlerReturnsEmptyEntries [
 
 	self assert: handler selectorEntries isEmpty.
 	self assert: handler classEntries isEmpty
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testFrequencyOrderingWithThreeSelectors [
+CooWeightedClassFrequencyHandlerExtendedTest >> testFrequencyOrderingWithThreeSelectors [
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #alpha; nameOfClass: 'A'; yourself).
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #beta; nameOfClass: 'A'; yourself).
@@ -157,7 +157,7 @@ CooFrequencyHandlerExtendedTest >> testFrequencyOrderingWithThreeSelectors [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testModifiedClassIncrementsSameKey [
+CooWeightedClassFrequencyHandlerExtendedTest >> testModifiedClassIncrementsSameKey [
 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 	handler handleNewClassItem: (CooModifiedClassHistoryItem new nameOfClass: 'Widget'; yourself).
@@ -167,7 +167,7 @@ CooFrequencyHandlerExtendedTest >> testModifiedClassIncrementsSameKey [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
+CooWeightedClassFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
 
 	| added modified |
 	added := CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself.
@@ -180,21 +180,21 @@ CooFrequencyHandlerExtendedTest >> testModifiedMethodIncrementsSameKeyAsAdded [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testModifiyingNonExistingClassDoesNotCrash [
+CooWeightedClassFrequencyHandlerExtendedTest >> testModifiyingNonExistingClassDoesNotCrash [
 
 	handler handleNewClassItem: (CooModifiedClassHistoryItem new nameOfClass: 'Widget'; yourself).
 	self assert: handler classEntries size equals: 1
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testModifiyingNonExistingMethodDoesNotCrash [
+CooWeightedClassFrequencyHandlerExtendedTest >> testModifiyingNonExistingMethodDoesNotCrash [
 
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'Widget'; yourself).
 	self assert: handler selectorEntries size equals: 1
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testModifyMethodIncrementsClassFrequency [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testModifyMethodIncrementsClassFrequency [ 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA').
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassB').
 	
@@ -209,7 +209,7 @@ CooFrequencyHandlerExtendedTest >> testModifyMethodIncrementsClassFrequency [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveClass [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveClass [
 	
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'Widget').
 	self assert: handler classEntries first contents equals: 'Widget'.
@@ -218,7 +218,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveClass [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveClassDecrementsAllMethodsFrequency [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveClassDecrementsAllMethodsFrequency [ 
 	| before after|
 
 "Class A defines three methods m1, m2 and m3"
@@ -244,7 +244,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveClassDecrementsAllMethodsFrequency 
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveClassDecrementsOnlyThatClassMethodFrequencies [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveClassDecrementsOnlyThatClassMethodFrequencies [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassB'; yourself ).
 	
@@ -264,7 +264,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveClassDecrementsOnlyThatClassMethodF
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveNonExistentClassDoesNotCrash [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveNonExistentClassDoesNotCrash [
 
 	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'Ghost'; yourself).
 
@@ -272,7 +272,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveNonExistentClassDoesNotCrash [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveNonExistentSelectorDoesNotCrash [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveNonExistentSelectorDoesNotCrash [
 
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #ghost; nameOfClass: 'A'; yourself).
 
@@ -280,7 +280,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveNonExistentSelectorDoesNotCrash [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemoveThenReAddStartsFresh [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemoveThenReAddStartsFresh [
 
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'A'; yourself).
@@ -293,7 +293,7 @@ CooFrequencyHandlerExtendedTest >> testRemoveThenReAddStartsFresh [
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemovingClassRemovesClassFromClassDictionnary [
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingClassRemovesClassFromClassDictionnary [
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	
 	handler handleNewClassItem: (CooRemovedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
@@ -305,7 +305,7 @@ CooFrequencyHandlerExtendedTest >> testRemovingClassRemovesClassFromClassDiction
 ]
 
 { #category : 'tests' }
-CooFrequencyHandlerExtendedTest >> testRemovingMethodDecreasesClassFrequency [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingMethodIncreasesClassFrequency [ 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
@@ -314,6 +314,6 @@ CooFrequencyHandlerExtendedTest >> testRemovingMethodDecreasesClassFrequency [
 	
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	
-	self assert: (handler frequencyOfClass: 'ClassA' ) equals: 1.
+	self assert: (handler frequencyOfClass: 'ClassA' ) equals: 3.
 	
 ]
