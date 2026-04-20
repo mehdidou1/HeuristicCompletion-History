@@ -442,16 +442,9 @@ CooSession >> size [
 { #category : 'structural handler configuration' }
 CooSession >> structuralFrequency [
 
-	programEntityHandler := CooFrequencyHandler new.
+	programEntityHandler := CooWeightedClassFrequencyHandler new.
 
  
-]
-
-{ #category : 'structural handler configuration' }
-CooSession >> structuralLRU [
-
-	programEntityHandler := CooLRUHandler new.
-	
 ]
 
 { #category : 'structural handler configuration' }

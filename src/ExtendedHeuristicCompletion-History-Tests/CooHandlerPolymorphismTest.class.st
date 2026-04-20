@@ -9,7 +9,7 @@ Class {
 { #category : 'helpers' }
 CooHandlerPolymorphismTest >> allHandlerClasses [
 
-	^ { CooTemporalHandler. CooFrequencyHandler. CooLRUHandler }
+	^ { CooTemporalHandler. CooWeightedClassFrequencyHandler }
 ]
 
 { #category : 'helpers' }

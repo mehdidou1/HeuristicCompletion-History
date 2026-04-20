@@ -33,7 +33,7 @@ CooSessionCompositionTest >> fakeInteractionItemWithToken: aToken selectedIndex:
 CooSessionCompositionTest >> setUp [
 
 	super setUp.
-	session := CooSession new programEntityHandler: CooFrequencyHandler new
+	session := CooSession new programEntityHandler: CooWeightedClassFrequencyHandler new
 ]
 
 { #category : 'tests' }

@@ -7,7 +7,7 @@ When it is removed I remove its entry (because I do not want to see it again at 
 
 "
 Class {
-	#name : 'CooFrequencyHandler',
+	#name : 'CooWeightedClassFrequencyHandler',
 	#superclass : 'CooProgramEntityHandler',
 	#instVars : [
 		'classFrequencyDictionary',
@@ -20,7 +20,7 @@ Class {
 }
 
 { #category : 'matching' }
-CooFrequencyHandler >> classEntries [
+CooWeightedClassFrequencyHandler >> classEntries [
 
 	^ (classFrequencyDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
 			  (CoSessionGlobalEntry contents: each key node: nil)
@@ -29,22 +29,22 @@ CooFrequencyHandler >> classEntries [
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> classToMethodsMap [ 
+CooWeightedClassFrequencyHandler >> classToMethodsMap [ 
 	^ classToMethodsMap 
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> frequencyOfClass: aClass [
+CooWeightedClassFrequencyHandler >> frequencyOfClass: aClass [
 	^ classFrequencyDictionary at: aClass value
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> frequencyOfMethod: aSelector [
+CooWeightedClassFrequencyHandler >> frequencyOfMethod: aSelector [
 	^ selectorFrequenceDictionary at: aSelector value
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> handleNewClassItem: anItem [
+CooWeightedClassFrequencyHandler >> handleNewClassItem: anItem [
 
 	| key classes|
 	key := anItem nameOfClass.
@@ -74,7 +74,7 @@ CooFrequencyHandler >> handleNewClassItem: anItem [
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> handleNewMethodItem: anItem [
+CooWeightedClassFrequencyHandler >> handleNewMethodItem: anItem [
 	"here we will have to manage the incremental management of the new event see comments in selectorentries."
 	
 	| key |
@@ -115,7 +115,7 @@ CooFrequencyHandler >> handleNewMethodItem: anItem [
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> initialize [
+CooWeightedClassFrequencyHandler >> initialize [
 
 	super initialize.
 	classFrequencyDictionary := Dictionary new.
@@ -125,7 +125,7 @@ CooFrequencyHandler >> initialize [
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> selectorEntries [
+CooWeightedClassFrequencyHandler >> selectorEntries [
 
 	^ (selectorFrequenceDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
 			  (CoSessionSelectorEntry contents: each key node: nil)
@@ -134,6 +134,6 @@ CooFrequencyHandler >> selectorEntries [
 ]
 
 { #category : 'matching' }
-CooFrequencyHandler >> selectorFrequencies [ 
+CooWeightedClassFrequencyHandler >> selectorFrequencies [ 
 	^ selectorFrequenceDictionary values
 ]
