@@ -1,77 +1,21 @@
 "
-I count each time a method or a class is added, modified, removed for now. 
+I count each time a method or a class is added, modified, removed :
 
-When a method is added or modified I increase its counter. 
-When it is removed I remove its entry (because I do not want to see it again at all - because we could if everything is zero). 
-
+Creating a class or method initializes its frequency to 1.
+Updating a class or method increases its frequency by 1.
+Adding a method initializes its frequency and increases the frequency of its owning class.
+Updating a method increases both its frequency and the frequency of its owning class.
+Deleting a method decreases its frequency and removes its association with its class and increments the class' frequency.
+Deleting a class removes it and decreases the frequency of all its methods by 1.
 
 "
 Class {
 	#name : 'CooWeightedClassFrequencyHandler',
-	#superclass : 'CooProgramEntityHandler',
-	#instVars : [
-		'classFrequencyDictionary',
-		'selectorFrequenceDictionary',
-		'classToMethodsMap'
-	],
+	#superclass : 'CooFrequency',
 	#category : 'ExtendedHeuristicCompletion-History-Session',
 	#package : 'ExtendedHeuristicCompletion-History',
 	#tag : 'Session'
 }
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> classEntries [
-
-	^ (classFrequencyDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (CoSessionGlobalEntry contents: each key node: nil)
-				  sessionItem: each;
-				  fetcherName: 'Session Frequency' ]
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> classToMethodsMap [ 
-	^ classToMethodsMap 
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> frequencyOfClass: aClass [
-	^ classFrequencyDictionary at: aClass value
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> frequencyOfMethod: aSelector [
-	^ selectorFrequenceDictionary at: aSelector value
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> handleNewClassItem: anItem [
-
-	| key classes|
-	key := anItem nameOfClass.
-	"to be changed"
-	(#(#added #modified) includes: anItem event) 
-		ifTrue: [ 
-			classFrequencyDictionary 
-				at: key
-				ifPresent: [:v  | classFrequencyDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
-			"We initialize the new correspending OrderedCollection if it is a new class"
-			classToMethodsMap at: key 
-			ifAbsentPut: OrderedCollection new.
-	
- 	(anItem event = #removed)
-		ifTrue: [ 
-			classFrequencyDictionary removeKey: key ifAbsent: [  ].
-			classFrequencyDictionary removeKey: (key, ' class') asSymbol ifAbsent: [  ].
-			"extract the methods of the class in question, 
-			for each method we decrement its frequency
-			We don't need the correspendance item anymore, we should delete it 
-			"
-			classes := classToMethodsMap at:key value.
-			classes do: [ :m | (selectorFrequenceDictionary includesKey: m) ifTrue: [ selectorFrequenceDictionary at: m put: (selectorFrequenceDictionary at: m) - 1 ] ].
-			classToMethodsMap removeKey: key
-			]
-]
 
 { #category : 'matching' }
 CooWeightedClassFrequencyHandler >> handleNewMethodItem: anItem [
@@ -92,7 +36,7 @@ CooWeightedClassFrequencyHandler >> handleNewMethodItem: anItem [
 						ifAbsent: [ classFrequencyDictionary at: anItem nameOfClass put: 1 ]. 
 					(classToMethodsMap
     					at: anItem nameOfClass
-    					ifAbsentPut: [ OrderedCollection new ])
+    					ifAbsentPut: [ Set new ])
         				add: key.
 					].
 	
@@ -101,9 +45,9 @@ CooWeightedClassFrequencyHandler >> handleNewMethodItem: anItem [
 			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved, in the oother hand, if the method's class does not exist in classEntries then we do nothing"
 			selectorFrequenceDictionary at: key
     			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]. 
-			"Decrease that class frequency"
+			"Increase that class frequency"
 			classFrequencyDictionary at: anItem nameOfClass 
-				ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value -1 ].
+				ifPresent: [ :value | classFrequencyDictionary at: anItem nameOfClass put: value + 1 ].
 			"Update the associations"
 			(classToMethodsMap includesKey: anItem nameOfClass)
     ifTrue: [
@@ -112,28 +56,4 @@ CooWeightedClassFrequencyHandler >> handleNewMethodItem: anItem [
     ].
 
 		  ]
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> initialize [
-
-	super initialize.
-	classFrequencyDictionary := Dictionary new.
-	selectorFrequenceDictionary := Dictionary new.
-	classToMethodsMap := Dictionary new
-	
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> selectorEntries [
-
-	^ (selectorFrequenceDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (CoSessionSelectorEntry contents: each key node: nil)
-				  sessionItem: each;
-				  fetcherName: 'Session Frequency' ]
-]
-
-{ #category : 'matching' }
-CooWeightedClassFrequencyHandler >> selectorFrequencies [ 
-	^ selectorFrequenceDictionary values
 ]

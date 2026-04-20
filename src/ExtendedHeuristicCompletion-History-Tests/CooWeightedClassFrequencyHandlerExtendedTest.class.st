@@ -69,7 +69,7 @@ CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenAAddingA
 	
 	self assert: handler classToMethodsMap size equals: 1.
 	self assert: (handler classToMethodsMap includesKey: 'ClassA').
-	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (OrderedCollection new).
+	self assert: (handler classToMethodsMap at: 'ClassA') value equals: (Set new).
 	
 	
 ]
@@ -101,7 +101,7 @@ CooWeightedClassFrequencyHandlerExtendedTest >> testClassTOMethodMapWhenModifyin
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	handler handleNewMethodItem: (CooModifiedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'). 
 	
-	self assert: (handler classToMethodsMap at: 'ClassA') size equals: 2
+	self assert: (handler classToMethodsMap at: 'ClassA') size equals: 1
 ]
 
 { #category : 'tests' }
@@ -305,7 +305,7 @@ CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingClassRemovesClassFro
 ]
 
 { #category : 'tests' }
-CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingMethodDecreasesClassFrequency [ 
+CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingMethodIncreasesClassFrequency [ 
 	handler handleNewClassItem: (CooAddedClassHistoryItem new nameOfClass: 'ClassA'; yourself ).
 	
 	handler handleNewMethodItem: (CooAddedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
@@ -314,6 +314,6 @@ CooWeightedClassFrequencyHandlerExtendedTest >> testRemovingMethodDecreasesClass
 	
 	handler handleNewMethodItem: (CooRemovedMethodHistoryItem new selector: #foo; nameOfClass: 'ClassA'; yourself ).
 	
-	self assert: (handler frequencyOfClass: 'ClassA' ) equals: 1.
+	self assert: (handler frequencyOfClass: 'ClassA' ) equals: 3.
 	
 ]
