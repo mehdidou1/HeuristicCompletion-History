@@ -20,7 +20,7 @@ Class {
 }
 
 { #category : 'tracking' }
-CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
+CooDualMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem [
 
 	aSelectionItem token first isLowercase 
 		ifTrue: [self incrementLowercasedUsageFor: aSelectionItem selectedItemEntry]

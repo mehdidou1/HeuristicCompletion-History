@@ -364,7 +364,7 @@ CooSessionTemporalTest >> testShiftHandlerTo [
 		session addMethodItem: each ].
 	
 	self assert: session selectorEntries size equals: 4.
-	session shiftHandlerTo: CooFrequencyHandler new. 
+	session shiftHandlerTo: CooWeightedClassFrequencyHandler new. 
 	
 	self 
 		assert: (session selectorEntries collect: [ :each | each selector ])

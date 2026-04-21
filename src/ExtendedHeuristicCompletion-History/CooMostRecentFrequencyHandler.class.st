@@ -19,7 +19,7 @@ Class {
 }
 
 { #category : 'tracking' }
-CooMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
+CooMostRecentFrequencyHandler >> handleNewSelectionItem: aSelectionItem [
 
 	self incrementUsageFor: aSelectionItem selectedItemEntry
 ]

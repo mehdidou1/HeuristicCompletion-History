@@ -182,7 +182,7 @@ CooSession >> addCompletionItem: aCompletionEntryItem [
 	
 	"Instead of poking the handler during each addition we could pass it all the info when 
 	requesting a list of entries."
-	userSelectionHandler handleNewSelectionItem: item addedTo: completionItems
+	userSelectionHandler handleNewSelectionItem: item
 ]
 
 { #category : 'method handling' }
@@ -192,7 +192,7 @@ CooSession >> addMethodItem: anItem [
 	"Instead of poking the handler during each addition we could pass it all the info when 
 	requesting a list of entries."
 	
-	programEntityHandler handleNewMethodItem: anItem addedTo: methodDescriptions
+	programEntityHandler handleNewMethodItem: anItem
 ]
 
 { #category : 'method handling' }
@@ -442,16 +442,9 @@ CooSession >> size [
 { #category : 'structural handler configuration' }
 CooSession >> structuralFrequency [
 
-	programEntityHandler := CooFrequencyHandler new.
+	programEntityHandler := CooWeightedClassFrequencyHandler new.
 
  
-]
-
-{ #category : 'structural handler configuration' }
-CooSession >> structuralLRU [
-
-	programEntityHandler := CooLRUHandler new.
-	
 ]
 
 { #category : 'structural handler configuration' }

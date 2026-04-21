@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'api' }
-CooUserSelectionHandler >> handleNewSelectionItem: aSelectionItem addedTo: aCollection [
+CooUserSelectionHandler >> handleNewSelectionItem: aSelectionItem [
 
 	^ self
 ]

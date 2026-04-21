@@ -1,79 +1,14 @@
 "
-I count each time a method or a class is added, modified, removed for now. 
+CooFrequencyHandler  
 
-When a method is added or modified I increase its counter. 
-When it is removed I remove its entry (because I do not want to see it again at all - because we could if everything is zero). 
-
-
+I count eeach time a class or a method is created, modified or removed
 "
 Class {
 	#name : 'CooFrequencyHandler',
-	#superclass : 'CooProgramEntityHandler',
-	#instVars : [
-		'classFrequencyDictionary',
-		'selectorFrequenceDictionary'
-	],
-	#category : 'ExtendedHeuristicCompletion-History-Session',
-	#package : 'ExtendedHeuristicCompletion-History',
-	#tag : 'Session'
+	#superclass : 'CooFrequency',
+	#category : 'ExtendedHeuristicCompletion-History',
+	#package : 'ExtendedHeuristicCompletion-History'
 }
-
-{ #category : 'matching' }
-CooFrequencyHandler >> classEntries [
-
-	^ (classFrequencyDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (CoSessionGlobalEntry contents: each key node: nil)
-				  sessionItem: each;
-				  fetcherName: 'Session Frequency' ]
-]
-
-{ #category : 'matching' }
-CooFrequencyHandler >> handleNewClassItem: anItem [
-
-	| key |
-	key := anItem nameOfClass.
-	
-	"to be changed"
-	(#(#added #modified) includes: anItem event) 
-		ifTrue: [ 
-			classFrequencyDictionary 
-				at: key
-				ifPresent: [:v  | classFrequencyDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
-	
- 	(anItem event = #removed)
-		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			classFrequencyDictionary removeKey: key ifAbsent: [  ]
-		
-		  ]
-	 
-
-]
-
-{ #category : 'matching' }
-CooFrequencyHandler >> handleNewClassItem: anItem addedTo: aCollection [
-
-	| key |
-	key := anItem nameOfClass.
-	
-	"to be changed"
-	(#(#added #modified) includes: anItem event) 
-		ifTrue: [ 
-			classFrequencyDictionary 
-				at: key
-				ifPresent: [:v  | classFrequencyDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
-	
- 	(anItem event = #removed)
-		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			classFrequencyDictionary removeKey: key ifAbsent: [  ]
-		
-		  ]
-	 
-
-]
 
 { #category : 'matching' }
 CooFrequencyHandler >> handleNewMethodItem: anItem [
@@ -81,59 +16,33 @@ CooFrequencyHandler >> handleNewMethodItem: anItem [
 	
 	| key |
 	key :=  anItem selector.
-	
 	"to be changed"
 	(#(#added #modified) includes: anItem event) 
 		ifTrue: [ 
 			selectorFrequenceDictionary 
 				at: key
-				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
+				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1]
+				ifAbsentPut: [ 1 ].
+			"Adding a method to a class should not affect its frequency"
+			classFrequencyDictionary at: anItem nameOfClass                     
+						ifAbsent: [ classFrequencyDictionary at: anItem nameOfClass put: 0 ]. 
+			(classToMethodsMap
+    					at: anItem nameOfClass
+    					ifAbsentPut: [ Set new ])
+        				add: key.
+					].
 	
  	(anItem event = #removed)
 		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			selectorFrequenceDictionary removeKey: key ifAbsent: [  ]
-		
+			"We never remove methods from the dictionnary, we just decrement the frequency, so the problem with having methods with same name is resolved, in the oother hand, if the method's class does not exist in classEntries then we do nothing"
+			selectorFrequenceDictionary at: key
+    			ifPresent: [:value | selectorFrequenceDictionary at: key put: value - 1]. 
+			"Update the associations"
+			(classToMethodsMap includesKey: anItem nameOfClass)
+    ifTrue: [
+        (classToMethodsMap at: anItem nameOfClass)
+            remove: key ifAbsent: [ ].
+    ].
+
 		  ]
-]
-
-{ #category : 'matching' }
-CooFrequencyHandler >> handleNewMethodItem: anItem addedTo: aCollection [
-	"here we will have to manage the incremental management of the new event see comments in selectorentries."
-	
-	| key |
-	key :=  anItem selector.
-	
-	"to be changed"
-	(#(#added #modified) includes: anItem event) 
-		ifTrue: [ 
-			selectorFrequenceDictionary 
-				at: key
-				ifPresent: [:v  | selectorFrequenceDictionary at: key put: v + 1 ]
-				ifAbsentPut: [ 1 ] ].
-	
- 	(anItem event = #removed)
-		ifTrue: [ 
-			"The problem could be removing two methods with the same name so the ifAbsent is important"
-			selectorFrequenceDictionary removeKey: key ifAbsent: [  ]
-		
-		  ]
-]
-
-{ #category : 'matching' }
-CooFrequencyHandler >> initialize [
-
-	super initialize.
-	classFrequencyDictionary := Dictionary new.
-	selectorFrequenceDictionary := Dictionary new
-]
-
-{ #category : 'matching' }
-CooFrequencyHandler >> selectorEntries [
-
-	^ (selectorFrequenceDictionary associations sort: [ :a1 :a2 | a1 value > a2 value ]) collect: [ :each |
-			  (CoSessionSelectorEntry contents: each key node: nil)
-				  sessionItem: each;
-				  fetcherName: 'Session Frequency' ]
 ]

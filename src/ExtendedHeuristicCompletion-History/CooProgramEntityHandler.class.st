@@ -28,12 +28,6 @@ CooProgramEntityHandler >> handleNewMethodItem: anItem [
 ]
 
 { #category : 'matching' }
-CooProgramEntityHandler >> handleNewMethodItem: anItem addedTo: aCollection [
-
-	self subclassResponsibility
-]
-
-{ #category : 'matching' }
 CooProgramEntityHandler >> selectorEntries [
 
 	self subclassResponsibility
