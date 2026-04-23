@@ -13,7 +13,7 @@ Class {
 CooFrequencyHandlerTest >> setUp [
 
 	super setUp.
-	handler := CooFrequencyHandler new
+	handler := CooSingleFrequencyHandler new
 ]
 
 { #category : 'tests - class' }

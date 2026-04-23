@@ -1,17 +1,18 @@
 "
-I count each time a method or a class is added, modified, removed :
+I count each time a method or a class is added, modified, removed. The key point is that I consider a class more important (frequent) when this class got more method added and modified. 
 
-Creating a class or method initializes its frequency to 1.
-Updating a class or method increases its frequency by 1.
-Adding a method initializes its frequency and increases the frequency of its owning class.
-Updating a method increases both its frequency and the frequency of its owning class.
-Deleting a method decreases its frequency and removes its association with its class and increments the class' frequency.
-Deleting a class removes it and decreases the frequency of all its methods by 1.
+Here are in details my approach: 
+- Creating a class or method initializes its frequency to 1.
+- Updating a class or method increases its frequency by 1.
+- Adding a method initializes its frequency and increases the frequency of its owning class.
+- Updating a method increases both its frequency and the frequency of its owning class.
+- Deleting a method decreases its frequency and removes its association with its class and increments the class' frequency.
+- Deleting a class removes it and decreases the frequency of all its method selector by 1.
 
 "
 Class {
 	#name : 'CooWeightedClassFrequencyHandler',
-	#superclass : 'CooFrequency',
+	#superclass : 'CooFrequencyHandler',
 	#category : 'ExtendedHeuristicCompletion-History-Session',
 	#package : 'ExtendedHeuristicCompletion-History',
 	#tag : 'Session'
