@@ -146,6 +146,44 @@ and, optionally:
 		->
 	HTTP server storing the serialized event logs
 ""
+
+
+
+# INSTALLATION
+
+Installation:
+```
+CooHistoryEventRecorder reset.
+CooHistoryEventRecorder serverUrl: 'http://127.0.0.1:8080/gt/events'.
+CooHistoryEventRecorder category: #history.
+CooHistoryEventRecorder install.
+```
+
+```
+CooHistoryEventRecorder reset.
+CooHistoryEventRecorder serverUrl: 'https://rmod-xp.lille.inria.fr/'.
+CooHistoryEventRecorder category: #history.
+CooHistoryEventRecorder install.
+```
+
+# CHECKING:
+```
+CooHistoryEventRecorder installed.
+CooHistoryEventRecorder serverUrl.
+CooHistoryEventRecorder category.
+```
+
+
+# Force send anything pending:
+
+```
+CooHistoryEventRecorder deliverNow.
+CooHistoryEventRecorder lastDeliveryError.
+CooHistoryEventRecorder lastDeliveryResponse.
+```
+
+
+
 "
 Class {
 	#name : 'CooHistoryEventRecorder',
