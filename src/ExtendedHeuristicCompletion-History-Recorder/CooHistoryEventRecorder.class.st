@@ -1,3 +1,152 @@
+"
+""
+I am a self-contained event recorder for the Extended Heuristic Completion history system.
+
+My job is to listen to Pharo code-change announcements and convert them into
+history items understood by CooSession.
+
+I do two things at the same time:
+
+1. I record events locally in the history model.
+
+   I listen to the system codeChangeAnnouncer for announcements such as:
+
+     - MethodAdded
+     - MethodModified
+     - MethodRemoved
+     - ClassAdded
+     - ClassModified
+     - ClassRemoved
+     - CoCompletionItemSelected, when available
+
+   For each announcement, I create the corresponding history item:
+
+     - CooAddedMethodHistoryItem
+     - CooModifiedMethodHistoryItem
+     - CooRemovedMethodHistoryItem
+     - CooAddedClassHistoryItem
+     - CooRemovedClassHistoryItem
+
+   Then I send the item to CooSession using:
+
+     - CooSession current addMethodItem:
+     - CooSession current addClassItem:
+
+   This means the normal history completion system can use the events through
+   CooSession selectorEntries and classEntries.
+
+   I do not modify the history package. I only feed it with events.
+
+2. I send a serialized copy of the events to a remote server.
+
+   Every event is also converted into a Dictionary and added to my internal
+   pendingEvents queue.
+
+   The queued events are wrapped in an envelope dictionary with metadata such as:
+
+     - schema name
+     - recorder class name
+     - timestamp
+     - category
+     - image information
+     - session information
+     - the list of recorded events
+
+   The envelope is serialized using STON when STON is available. If STON is not
+   available, I fall back to printString.
+
+   The serialized bytes are sent to the serverUrl using an HTTP PUT request.
+
+   The HTTP request uses the same general wire shape as the old EventRecorder
+   server protocol: multipart/form-data with two fields:
+
+     - category
+     - data
+
+   The category field contains my category, usually #history.
+   The data field contains the serialized event envelope.
+
+Typical usage:
+
+	CooHistoryEventRecorder reset.
+	CooHistoryEventRecorder serverUrl: 'https://rmod-xp.lille.inria.fr/'.
+	CooHistoryEventRecorder category: #history.
+	CooHistoryEventRecorder install.
+
+To force delivery manually:
+
+	CooHistoryEventRecorder deliverNow.
+
+To inspect delivery state:
+
+	CooHistoryEventRecorder lastDeliveryError.
+	CooHistoryEventRecorder lastDeliveryResponse.
+
+Logging behavior:
+
+I log locally to the Pharo Transcript when logToTranscript is true.
+
+The local Transcript logs are only diagnostic messages for the developer. They
+tell whether I was installed, whether delivery succeeded, or whether delivery
+failed.
+
+Examples of local Transcript logs:
+
+	CooHistoryEventRecorder installed. Server: https://rmod-xp.lille.inria.fr/
+	CooHistoryEventRecorder delivered 1 event(s).
+	CooHistoryEventRecorder delivery failed: ConnectionTimedOut: ...
+
+These Transcript messages are not the server log. They only describe what
+happened inside the Pharo image.
+
+Server-side logging depends on the server implementation.
+
+From the server point of view, each delivery is an HTTP PUT request containing a
+multipart form. A server that logs only HTTP requests may show something like:
+
+	PUT /gt/events 200
+	category=history
+	data=1842 bytes
+
+A server that decodes the data field can log the actual history content, for
+example:
+
+	schema=coo-history-event-recorder-v1
+	event.kind=method
+	event.event=added
+	event.className=MyClass
+	event.selector=myNewMethod
+
+Delivery failure handling:
+
+When delivery succeeds, the sent events are removed from pendingEvents.
+
+When delivery fails, I store the exception in lastDeliveryError and put the
+events back into pendingEvents, so they can be retried later by sending
+deliverNow again.
+
+I intentionally do not depend on DebuggingSpy, PXEventRecorder,
+PXEventCollector, EREventRecorderSettings, ERPrivacy, or the old EventRecorder
+delivery classes. This makes me usable in Pharo 14 even when those classes do
+not exist.
+
+I am meant to be the bridge between:
+
+	Pharo codeChangeAnnouncer
+		->
+	CooHistoryEventRecorder
+		->
+	CooSession history
+		->
+	history-based completion
+
+and, optionally:
+
+	CooHistoryEventRecorder
+		->
+	HTTP server storing the serialized event logs
+""
+"
 Class {
 	#name : 'CooHistoryEventRecorder',
 	#superclass : 'Object',
