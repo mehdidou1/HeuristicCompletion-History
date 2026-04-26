@@ -39,7 +39,8 @@ Class {
 		'userSelectionHandler',
 		'programEntityHandler',
 		'classDescriptions',
-		'methodDescriptions'
+		'methodDescriptions',
+		'navigationItems'
 	],
 	#classVars : [
 		'Current'
@@ -211,6 +212,12 @@ CooSession >> addModifiedMethodInVocabulary: anAnn [
 	self addMethodItem: item
 ]
 
+{ #category : 'navigation' }
+CooSession >> addNavigationItem: aNavigationHistoryItem [
+
+	navigationItems addFirst: aNavigationHistoryItem
+]
+
 { #category : 'class handling' }
 CooSession >> addNewClassInVocabulary: ann [
 
@@ -244,7 +251,9 @@ CooSession >> classDescriptions [
 { #category : 'matching' }
 CooSession >> classEntries [
 
-	^ userSelectionHandler sortedUserUppercasedEntries, programEntityHandler classEntries
+	^ userSelectionHandler sortedUserUppercasedEntries
+		, self navigationClassEntries
+		, programEntityHandler classEntries
 ]
 
 { #category : 'helpers' }
@@ -307,6 +316,7 @@ CooSession >> initialize [
 	super initialize.
 	self resetProgramEntities.
 	self resetInteractionItems.
+	self resetNavigationItems.
 ]
 
 { #category : 'low-level' }
@@ -327,6 +337,46 @@ CooSession >> mostRecentFrequentSelectionHandling [
 	userSelectionHandler := CooMostRecentFrequencyHandler new.
 ]
 
+{ #category : 'navigation' }
+CooSession >> navigationClassEntries [
+
+	| seen entries |
+	navigationItems ifNil: [ ^ #() ].
+	seen := Set new.
+	entries := OrderedCollection new.
+	navigationItems do: [ :item |
+		(item isClassObservation and: [ (seen includes: item name) not ]) ifTrue: [
+			seen add: item name.
+			entries add: ((CoSessionGlobalEntry contents: item name node: nil)
+					 sessionItem: item;
+					 fetcherName: 'Session Navigation';
+					 yourself) ] ].
+	^ entries first: (entries size min: 5)
+]
+
+{ #category : 'navigation' }
+CooSession >> navigationItems [
+
+	^ navigationItems
+]
+
+{ #category : 'navigation' }
+CooSession >> navigationSelectorEntries [
+
+	| seen entries |
+	navigationItems ifNil: [ ^ #() ].
+	seen := Set new.
+	entries := OrderedCollection new.
+	navigationItems do: [ :item |
+		(item isSelectorObservation and: [ (seen includes: item name) not ]) ifTrue: [
+			seen add: item name.
+			entries add: ((CoSessionSelectorEntry contents: item name node: nil)
+					 sessionItem: item;
+					 fetcherName: 'Session Navigation';
+					 yourself) ] ].
+	^ entries first: (entries size min: 5)
+]
+
 { #category : 'interaction configuration' }
 CooSession >> noUserSelectionHandling [
 
@@ -343,6 +393,7 @@ CooSession >> printOn: aStream [
 	aStream space ; nextPutAll: 'cls '; print: classDescriptions size.
 	aStream space ; nextPutAll: (userSelectionHandler class name allButFirst: 3).
 	aStream space ; nextPutAll: 'interaction'; print: completionItems size.
+	aStream space ; nextPutAll: 'navigation'; print: (navigationItems ifNil: [ 0 ] ifNotNil: [ navigationItems size ]).
 ]
 
 { #category : 'accessing - handlers' }
@@ -393,7 +444,8 @@ CooSession >> reportString [
 		aStream space ; nextPutAll: 'mths '; print: methodDescriptions size.
 		aStream space ; nextPutAll: 'cls '; print: classDescriptions size.
 		aStream space ; nextPutAll: (userSelectionHandler class name allButFirst: 3).
-		aStream space ; nextPutAll: 'interaction'; print: completionItems size ]
+		aStream space ; nextPutAll: 'interaction'; print: completionItems size .
+	aStream space ; nextPutAll: 'navigation'; print: (navigationItems ifNil: [ 0 ] ifNotNil: [ navigationItems size ]) ]
 ]
 
 { #category : 'initialization' }
@@ -402,6 +454,12 @@ CooSession >> resetInteractionItems [
 	completionItems := OrderedCollection new.
 	self mostDualRecentFrequentSelectionHandling.
 	
+]
+
+{ #category : 'printing' }
+CooSession >> resetNavigationItems [
+
+	navigationItems := OrderedCollection new
 ]
 
 { #category : 'initialization' }
@@ -413,14 +471,22 @@ CooSession >> resetProgramEntities [
 	
 ]
 
+{ #category : 'navigation' }
+CooSession >> scrapeNavigationFromOpenBrowsers [
+
+	^ CooNavigationScrapper new feedSession: self
+]
+
 { #category : 'matching' }
 CooSession >> selectorEntries [
 	"Return a list of message selector entries computed from the user interaction and the modification of program."
-	
+
 	"here I would love to know the token because I could then 
 	decide if the user is looking for a global or not."
-	
-	^ userSelectionHandler sortedUserLowercasedEntries, programEntityHandler selectorEntries 
+
+	^ userSelectionHandler sortedUserLowercasedEntries
+		, self navigationSelectorEntries
+		, programEntityHandler selectorEntries
 ]
 
 { #category : 'updating' }
